@@ -1,43 +1,78 @@
 import { useFormik } from "formik";
 import React from "react";
+import Button from "./button";
+import { loginSchemas } from "../../schemas";
+import "../../App.css";
+const onSubmit = () => {
+  console.log("submit");
+};
 const LoginForm: React.FC = () => {
-  const formik = useFormik({
+  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      userName: "",
+      password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit,
+    validationSchema: loginSchemas,
   });
+  console.log(errors);
+
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="firstName">First Name</label>
-      <input
-        id="firstName"
-        name="firstName"
-        type="text"
-        onChange={formik.handleChange}
-        value={formik.values.firstName}
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full flex-col my-10 p-[10px_15px] "
+    >
+      <div className="flex flex-col mb-3">
+        <input
+          id="userName"
+          name="userName"
+          type="text"
+          onChange={handleChange}
+          value={values.userName}
+          className={`border p-[5px_10px] w-full border-black outline-none border-1 ${
+            errors.userName && touched.userName ? "input-error" : ""
+          }`}
+          placeholder="Теллефон,имя пользователя или эл.адрес "
+        />
+        {errors.userName && touched.userName && (
+          <span className="error">{errors.userName}</span>
+        )}
+      </div>
+      <div className="flex flex-col mb-3">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          onChange={handleChange}
+          value={values.password}
+          className={`border p-[5px_10px] border-black outline-none border-1 ${
+            errors.password && touched.password ? "input-error" : ""
+          }`}
+          placeholder="Пароль"
+        />
+        {errors.password && touched.password && (
+          <span className="error my-[0px]">{errors.password}</span>
+        )}
+      </div>
+      {/* {values.userName == "" || values.password == "" ? ( */}
+      {/* <Button
+          label={"Войти"}
+          clasName={`p-[8px_15px]  rounded-2xl`}
+          disabled={true}
+        />
+      ) : ( */}
+      <Button
+        label={"Войти"}
+        clasName={`p-[8px_15px]  rounded-2xl`}
+        disabled={false}
       />
-      <label htmlFor="lastName">Last Name</label>
-      <input
-        id="lastName"
-        name="lastName"
-        type="text"
-        onChange={formik.handleChange}
-        value={formik.values.lastName}
-      />
-      <label htmlFor="email">Email Address</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
-      <button type="submit">Submit</button>
+      {/* )} */}
+
+      <div className="flex items-center justify-center my-5">
+        <div className="h-px bg-gray-700 w-1/2" />
+        <p className="mx-4">or</p>
+        <div className="h-px bg-gray-700 w-1/2" />
+      </div>
     </form>
   );
 };
