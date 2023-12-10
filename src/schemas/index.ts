@@ -19,3 +19,7 @@ export const registerSchemas = yup.object().shape({
     .oneOf([yup.ref("password"), undefined], "Password must match")
     .required("Required"),
 });
+
+export const forgotSchemas = yup.object().shape({
+  email: yup.string().email("Please enter a valid emil").required("Requaride"),
+});

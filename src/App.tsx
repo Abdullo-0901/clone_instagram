@@ -1,18 +1,25 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Layout, Login, Register } from "./routes/routes";
+import { Layout } from "./routes/routes";
 import { Suspense } from "react";
 import Loading from "./components/loading";
 import Home from "./pages/home";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import ForgotPassword from "./pages/forgot-password";
 
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: "/login",
+      path: "/",
       element: <Login />,
     },
     {
-      path: "/accounts/emailsignup",
+      path: "signup",
       element: <Register />,
+    },
+    {
+      path: "accounts-forgot-password",
+      element: <ForgotPassword />,
     },
     {
       path: "/home",
