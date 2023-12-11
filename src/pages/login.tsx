@@ -10,8 +10,12 @@ const Login = () => {
         <img src={phone} alt="" />
       </div>
       <div className="col-span-2">
-        <div className="w-full h-[420px]  items-center p-[20px_10px] border border-1  border-gray-200 flex flex-col">
-          <img src={logoText} alt="text-instagram" className="w-[185px] mt-5" />
+        <div className="w-full h-[520px]  items-center p-[20px_10px] border border-1  border-gray-200 flex flex-col">
+          <img
+            src={logoText}
+            alt="text-instagram"
+            className="w-[185px] mt-5  mb-2"
+          />
           <LoginForm />
           <span className="text-[20px] cursor-pointer font-[600] text-[#385185]">
             Войти через Facebook

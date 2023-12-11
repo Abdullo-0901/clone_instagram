@@ -6,24 +6,42 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ForgotPassword from "./pages/forgot-password";
+import AuthCheck from "./utils/AuthCheck";
+import ProtectRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Login />,
+      element: (
+        <AuthCheck>
+          <Login />
+        </AuthCheck>
+      ),
     },
     {
       path: "signup",
-      element: <Register />,
+      element: (
+        <AuthCheck>
+          <Register />
+        </AuthCheck>
+      ),
     },
     {
       path: "accounts-forgot-password",
-      element: <ForgotPassword />,
+      element: (
+        <AuthCheck>
+          <ForgotPassword />
+        </AuthCheck>
+      ),
     },
     {
       path: "/home",
-      element: <Layout />,
+      element: (
+        <ProtectRoute>
+          <Layout />
+        </ProtectRoute>
+      ),
       children: [
         {
           index: true,
