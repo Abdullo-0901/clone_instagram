@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Layout } from "./routes/routes";
+import { Layout, Profile } from "./routes/routes";
 import { Suspense } from "react";
+
 import Loading from "./components/loading";
 import Home from "./pages/home";
 import Login from "./pages/login";
@@ -48,6 +49,14 @@ const App = () => {
           element: (
             <Suspense fallback={<Loading />}>
               <Home />
+            </Suspense>
+          ),
+        },
+        {
+          path: "profile",
+          element: (
+            <Suspense fallback={<Loading />}>
+              <Profile />
             </Suspense>
           ),
         },

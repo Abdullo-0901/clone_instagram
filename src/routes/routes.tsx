@@ -7,7 +7,7 @@ export const Login = lazy(() => import("../pages/login.tsx"));
 export const Messages = lazy(() => import("../pages/messages"));
 export const More = lazy(() => import("../pages/more"));
 export const Notifications = lazy(() => import("../pages/notifications"));
-export const Profile = lazy(() => import("../pages/profile"));
+export const Profile = lazy(() => import("../pages/Profile.tsx"));
 export const Reels = lazy(() => import("../pages/reels"));
 export const Register = lazy(() => import("../pages/register.tsx"));
 export const SearchQuery = lazy(() => import("../pages/search-query"));

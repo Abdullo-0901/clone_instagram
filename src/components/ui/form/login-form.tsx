@@ -7,7 +7,6 @@ import {
   FormHelperText,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   Stack,
   Typography,
@@ -18,6 +17,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { loginSchemas } from "../../../schemas";
 import { saveToken } from "../../../utils/token";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../../store/storeSlice";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -31,7 +32,7 @@ const LoginForm = () => {
     event.preventDefault();
   };
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   return (
     <div className="bg-[#fafafb]">
       <div className="bgLogin">
@@ -53,9 +54,9 @@ const LoginForm = () => {
                   password: values.password,
                 },
               );
-              if (data.statusText == "OK") {
-                console.log(data.data.data);
 
+              if (data.statusText == "OK") {
+                dispatch(setToken(data.data.data));
                 saveToken(data.data.data);
                 navigate("/home");
               }

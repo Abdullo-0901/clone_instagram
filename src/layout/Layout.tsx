@@ -1,31 +1,60 @@
-import { Link, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { useQuery } from "react-query";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
 import { navbar } from "../components/navbar";
+import { destroyToken, isValidToken } from "../utils/token";
 
+import { layoutApi } from "../api/layout-api";
 const Layout = () => {
-  return (
-    <div className="flex ">
-      <header className="w-[230px] border-l-2 border h-[100vh] p-[5px_10px] mr-[182px] border-gray-300 sticky top-0 flex flex-col gap-y-2">
-        <Link to={"/home"}>
-          <img className="w-[120px] m-[35px_10px]" src={logoText} alt="" />
-        </Link>
-        {navbar.map((el) => {
-          console.log(el.icons);
+  const navigate = useNavigate();
 
-          return (
-            <div>
+  useEffect(() => {
+    if (isValidToken()) {
+      destroyToken();
+    }
+  }, [navigate]);
+  const { data } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => layoutApi,
+  });
+
+  return (
+    <div className="flex w-full">
+      <div className="min-w-[250px] border-l-2 border min-h-[100vh] p-[5px_10px] border-gray-300">
+        <header className="fixed  flex flex-col gap-y-2  top-0">
+          <Link to={"/home"}>
+            <img className="w-[120px] m-[35px_10px]" src={logoText} alt="" />
+          </Link>
+          {navbar.map((el) => {
+            return (
               <Link
-                className="flex hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl"
+                className="flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl"
                 to={el.path}
                 key={el.id}
               >
                 <span>{el.icons}</span>
                 {el.title}
               </Link>
+            );
+          })}
+          <Link
+            className="flex  hover:bg-gray-200 transition hover:scale-105 items-center duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl"
+            to={"/profile"}
+          >
+            <div className="w-[30px] rounded-full  ">
+              <img
+                className=" rounded-[50%] object-cover w-ful"
+                src={`${
+                  import.meta.env.VITE_APP_FILES_URL
+                }1497ae79-d617-40d8-8e34-e34b4dfba87f.png`}
+                alt=""
+              />
             </div>
-          );
-        })}
-      </header>
+            <span className="text-black font-600">Профиль</span>
+          </Link>
+        </header>
+      </div>
       <Outlet />
     </div>
   );

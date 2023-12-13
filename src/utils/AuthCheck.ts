@@ -12,7 +12,7 @@ const AuthCheck = (props: AuthCheckProp) => {
   useEffect(() => {
     if (token) {
       console.log(1);
-      return navigate("/dashboard");
+      return navigate("/");
     }
   }, [navigate, token]);
 

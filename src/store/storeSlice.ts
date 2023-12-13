@@ -6,17 +6,19 @@ export interface CounterState {
   valueSelect: object;
   company: string;
   showVacansy: boolean;
-  spets:string
+  spets: string;
   user: null;
+  token: string;
 }
-
+let tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
   openAddModal: false,
   valueSelect: {},
   company: "",
   showVacansy: false,
-  spets:'',
+  spets: "",
   user: null,
+  token: tokens ? tokens : "",
 };
 
 export const slice = createSlice({
@@ -39,10 +41,19 @@ export const slice = createSlice({
     setSpets: (state, action: PayloadAction<string>) => {
       state.spets = action.payload;
     },
-    
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+    },
   },
 });
 
 export default slice.reducer;
-export const { openModal, handleValue,setSpets, logout, setShowVacansy, setCompany } =
-  slice.actions;
+export const {
+  openModal,
+  handleValue,
+  setSpets,
+  logout,
+  setShowVacansy,
+  setCompany,
+  setToken,
+} = slice.actions;
