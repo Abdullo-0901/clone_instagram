@@ -11,7 +11,7 @@ interface ITokenType {
 }
 
 function saveToken(token: string) {
-  localStorage.setItem("access_token", token);
+  window.localStorage.setItem("access_token", token);
 }
 
 function destroyToken() {
@@ -36,8 +36,6 @@ function getToken() {
     const token: string | null = localStorage.getItem("access_token");
     if (token) {
       const decodedToken: { [key: string]: any } = jwt_decode(token);
-      console.log(decodedToken);
-
       let obj = {
         email: decodedToken.email,
         userName: decodedToken.name,

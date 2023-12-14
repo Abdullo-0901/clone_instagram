@@ -1,42 +1,46 @@
 import { useQuery } from "react-query";
-import { layoutApi } from "../api/layout-api";
 import "../App.css";
+import { layoutApi } from "../api/layout-api";
 import { getToken } from "../utils/token";
+import Post from "../components/home/Post";
 function Home() {
-  const { data } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => layoutApi,
+  const { data } = useQuery(["users"], layoutApi, {
+    refetchOnWindowFocus: false,
   });
+
   let user = getToken();
 
   return (
     <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
-      <div className="flex h-[65px] col-span-4 overflow-hidden gap-4 overflow-x-scroll example ">
-        <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-          <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
-        </div>
-        <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-          <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
-        </div>
+      <div className=" h-[65px] col-span-4 ">
+        <div className="flex h-[65px] overflow-hidden gap-4 overflow-x-scroll example ">
+          <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+            <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
+          </div>
+          <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+            <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
+          </div>
 
-        <div>
-          <button>
-            <div className="text-center">
-              <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-                <img
-                  src={
-                    data?.data.image == "" || data?.data.image == null
-                      ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                      : `${import.meta.env.VITE_APP_FILES_URL}${data?.data.image
-                          ?.userPhoto}`
-                  }
-                  className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"
-                  alt=""
-                />
+          <div>
+            <button>
+              <div className="text-center">
+                <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+                  <img
+                    src={
+                      data?.data.image == "" || data?.data.image == null
+                        ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                        : `${import.meta.env.VITE_APP_FILES_URL}${data?.data
+                            .image?.userPhoto}`
+                    }
+                    className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"
+                    alt=""
+                  />
+                </div>
               </div>
-            </div>
-          </button>
+            </button>
+          </div>
         </div>
+        <Post />
       </div>
       <div className="col-span-3 flex flex-col gap-y-4 p-[10px_71px]">
         <div className="flex items-center gap-3 justify-between w-full">
@@ -50,7 +54,7 @@ function Home() {
           <div className="flex flex-col">
             <span className="text-black font-[500]">{user?.userName}</span>
             <p className="text-gray-400 font-[400] text-[15px]">
-              {data?.data.data.fullName}
+              {data?.data.fullName}
             </p>
           </div>
 

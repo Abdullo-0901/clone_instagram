@@ -1,11 +1,8 @@
 import { useEffect } from "react";
-import { useQuery } from "react-query";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
 import { navbar } from "../components/navbar";
 import { destroyToken, isValidToken } from "../utils/token";
-
-import { layoutApi } from "../api/layout-api";
 const Layout = () => {
   const navigate = useNavigate();
 
@@ -14,15 +11,11 @@ const Layout = () => {
       destroyToken();
     }
   }, [navigate]);
-  const { data } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => layoutApi,
-  });
 
   return (
     <div className="flex w-full">
-      <div className="min-w-[250px] border-l-2 border min-h-[100vh] p-[5px_10px] border-gray-300">
-        <header className="fixed  flex flex-col gap-y-2  top-0">
+      <div className="min-w-[250px]  min-h-[100vh]  border-gray-300">
+        <header className="fixed min-w-[250px] p-[5px_10px]   min-h-[100vh] border-l-2 border flex flex-col gap-y-2  top-0">
           <Link to={"/home"}>
             <img className="w-[120px] m-[35px_10px]" src={logoText} alt="" />
           </Link>

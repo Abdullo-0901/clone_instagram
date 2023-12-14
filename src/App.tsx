@@ -1,12 +1,12 @@
+import { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout, Profile } from "./routes/routes";
-import { Suspense } from "react";
 
 import Loading from "./components/loading";
+import ForgotPassword from "./pages/forgot-password";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import ForgotPassword from "./pages/forgot-password";
 import AuthCheck from "./utils/AuthCheck";
 import ProtectRoute from "./utils/ProtectedRoute";
 

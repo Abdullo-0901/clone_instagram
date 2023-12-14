@@ -13,32 +13,26 @@ const initialValues: FormValues = {
   confirmPassword: "",
 };
 import { Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 import { registerSchemas } from "../../../schemas";
+import { axiosRequest } from "../../../utils/AxiosRequest";
 import Button from "../button";
 import { PasswordFormik, RegisterFormik } from "./form-from-formik";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 const RegisterForm = () => {
   const navigate = useNavigate();
   const handleSubmit = async (value: FormValues) => {
     const { email, fullName, password, userName, confirmPassword } = {
       ...value,
     };
+    let user = {
+      userName: userName,
+      fullName: fullName,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
     try {
-      const data = await axios.post(
-        `http://65.108.148.136:8085/Account/register`,
-        {
-          userName: userName,
-          fullName: fullName,
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-        },
-      );
-      console.log(data == null);
-      console.log(data.statusText === "null");
-      console.log(data.statusText == "OK");
-
+      let { data } = await axiosRequest.post("Account/register", user);
       if (data.statusText == "OK") {
         navigate("/");
       }

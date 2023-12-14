@@ -14,11 +14,11 @@ import {
 import axios from "axios";
 import { Formik } from "formik";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginSchemas } from "../../../schemas";
-import { saveToken } from "../../../utils/token";
-import { useDispatch } from "react-redux";
 import { setToken } from "../../../store/storeSlice";
+import { saveToken } from "../../../utils/token";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -56,12 +56,12 @@ const LoginForm = () => {
               );
 
               if (data.statusText == "OK") {
+                navigate("/home");
                 dispatch(setToken(data.data.data));
                 saveToken(data.data.data);
-                navigate("/home");
               }
             } catch (error: any) {
-              setErorEP(error.response.data.message);
+              setErorEP(error.response.data);
               setStatus({ success: false });
               setErrors({ submit: error.message });
               setSubmitting(false);
