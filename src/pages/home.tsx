@@ -1,14 +1,11 @@
-import { useQuery } from "react-query";
 import "../App.css";
-import { layoutApi } from "../api/layout-api";
-import { getToken } from "../utils/token";
+import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import Post from "../components/home/Post";
+import { getToken } from "../utils/token";
 function Home() {
-  const { data } = useQuery(["users"], layoutApi, {
-    refetchOnWindowFocus: false,
-  });
-
+  const { data } = UseGetUserProfileById();
   let user = getToken();
+  console.log(data);
 
   return (
     <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
@@ -30,7 +27,7 @@ function Home() {
                       data?.data.image == "" || data?.data.image == null
                         ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
                         : `${import.meta.env.VITE_APP_FILES_URL}${data?.data
-                            .image?.userPhoto}`
+                            .image[0]}`
                     }
                     className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"
                     alt=""

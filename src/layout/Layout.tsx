@@ -27,7 +27,7 @@ const Layout = () => {
                 key={el.id}
               >
                 <span>{el.icons}</span>
-                {el.title}
+                <span> {el.title}</span>
               </Link>
             );
           })}
