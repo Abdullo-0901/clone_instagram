@@ -4,7 +4,6 @@ import comment from "../../assets/comment.png";
 import send from "../../assets/send.png";
 import { UseGetPost } from "../customersHook/useGetPosts";
 import { UseGetUser } from "../customersHook/useGetUser";
-
 const Post = () => {
   const { data } = UseGetPost();
   const { data: users } = UseGetUser();
@@ -27,7 +26,7 @@ const Post = () => {
                   <div className="w-[42px] h-[42px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
                     <img
                       src={`${import.meta.env.VITE_APP_FILES_URL}${
-                        el.images[0]
+                        user.avatar
                       }`}
                       className="rounded-[30px] w-full h-full border-[2px] border-[white] bg-[white]"
                       alt=""

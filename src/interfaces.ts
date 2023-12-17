@@ -41,6 +41,13 @@ export interface storiesObj {
   createAt: any;
   userId: any;
 }
+export interface userStories {
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  fullname: string;
+  stories: [storiesObj];
+}
 // interface Post
 export interface IPost {
   pageNumber: number;
@@ -84,9 +91,5 @@ export interface IUser {
 }
 
 export interface IStories {
-  userId: string;
-  userName: string;
-  userPhoto: string;
-  fullname: string;
-  stories: storiesObj;
+  data: Array<userStories>;
 }

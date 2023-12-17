@@ -42,17 +42,5 @@ class getUser {
     );
   }
 }
-class getStories {
-  async getStories() {
-    return axios.get<IStories>(
-      `${import.meta.env.VITE_APP_API_URL}Story/get-stories`,
-      {
-        headers: {
-          Authorization: `Bearer ${token} `,
-        },
-      },
-    );
-  }
-}
 
-export { getPostsService, getUserById, getUser, getStories };
+export { getPostsService, getUserById, getUser };

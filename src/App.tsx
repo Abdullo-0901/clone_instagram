@@ -3,10 +3,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout, Profile } from "./routes/routes";
 
 import Loading from "./components/loading";
-import ForgotPassword from "./pages/forgot-password";
 import Home from "./pages/home";
 import Login from "./pages/login";
-import Register from "./pages/register";
+import SearchQuery from "./pages/search-query";
 import AuthCheck from "./utils/AuthCheck";
 import ProtectRoute from "./utils/ProtectedRoute";
 
@@ -20,22 +19,22 @@ const App = () => {
         </AuthCheck>
       ),
     },
-    {
-      path: "signup",
-      element: (
-        <AuthCheck>
-          <Register />
-        </AuthCheck>
-      ),
-    },
-    {
-      path: "accounts-forgot-password",
-      element: (
-        <AuthCheck>
-          <ForgotPassword />
-        </AuthCheck>
-      ),
-    },
+    // {
+    //   path: "signup",
+    //   element: (
+    //     <AuthCheck>
+    //       <Register />
+    //     </AuthCheck>
+    //   ),
+    // },
+    // {
+    //   path: "accounts-forgot-password",
+    //   element: (
+    //     <AuthCheck>
+    //       <ForgotPassword />
+    //     </AuthCheck>
+    //   ),
+    // },
     {
       path: "/home",
       element: (
@@ -51,6 +50,10 @@ const App = () => {
               <Home />
             </Suspense>
           ),
+        },
+        {
+          path: "search",
+          element: <SearchQuery />,
         },
         {
           path: "profile",

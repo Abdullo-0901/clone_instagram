@@ -1,11 +1,30 @@
+import "stories-react/dist/index.css";
 import "../App.css";
+import { UseGetStories } from "../components/customersHook/storiesHook/useGetStories";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import Post from "../components/home/Post";
 import { getToken } from "../utils/token";
+import FormDialog from "../components/dialog";
+// stories
+import "stories-react/dist/index.css";
+import { UseGetStoriesById } from "../components/customersHook/storiesHook/useGetStoriesById";
+import Stories from "stories-react";
 function Home() {
   const { data } = UseGetUserProfileById();
+  const { data: stories } = UseGetStories();
   let user = getToken();
-  console.log(data);
+  // stories
+  const { data: storiesId } = UseGetStoriesById();
+  let resStories = storiesId?.data.map((el) =>
+    el.stories.filter((elem) => elem.fileName != null),
+  );
+  let obj = resStories?.flat().map((el) => {
+    return {
+      type: "image",
+      url: `${import.meta.env.VITE_APP_FILES_URL}${el.fileName}`,
+      duration: 5000,
+    };
+  });
 
   return (
     <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
@@ -14,28 +33,29 @@ function Home() {
           <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
             <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
           </div>
-          <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-            <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
-          </div>
-
-          <div>
-            <button>
-              <div className="text-center">
-                <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-                  <img
-                    src={
-                      data?.data.image == "" || data?.data.image == null
-                        ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                        : `${import.meta.env.VITE_APP_FILES_URL}${data?.data
-                            .image[0]}`
-                    }
-                    className="rounded-[30px] h-[55px] border-[2px] border-[white] bg-[white]"
-                    alt=""
-                  />
-                </div>
+          {stories?.data.map((storie, id) => {
+            return (
+              <div key={id}>
+                <button onClick={() => console.log(0)}>
+                  <div className="text-center">
+                    <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+                      <img
+                        src={
+                          storie.userPhoto == "" || storie.userPhoto == null
+                            ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                            : `${import.meta.env.VITE_APP_FILES_URL}${
+                                storie.userPhoto
+                              }`
+                        }
+                        className="rounded-[30px] w-full h-[55px] border-[2px] border-[white] bg-[white]"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </button>
               </div>
-            </button>
-          </div>
+            );
+          })}
         </div>
         <Post />
       </div>
@@ -66,6 +86,9 @@ function Home() {
           </button>
         </div>
       </div>
+      <FormDialog>
+        <Stories width="400px" height="600px" stories={obj} />
+      </FormDialog>
     </div>
   );
 }
