@@ -18,12 +18,12 @@ function Home() {
   const { data: stories } = UseGetStories();
   let idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
+  console.log(storiesId);
 
   let user = getToken();
-  let res = storiesId?.data.filter((stor) => stor.userId == idx);
-  console.log(res);
+  // let res = storiesId?.data.filter((stor) => stor.userId == idx);
 
-  let resStories = res?.map((el) =>
+  let resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
   let obj = resStories?.flat().map((el) => {

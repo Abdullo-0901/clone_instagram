@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IPost, IStories, IUser, getUserByIdInterface } from "../interfaces";
+import { IPost, IUser, getUserByIdInterface } from "../interfaces";
 let token = window.localStorage.getItem("access_token");
 
 class getPostsService {
