@@ -19,8 +19,7 @@ const Post = () => {
   const { data: storiesId } = UseGetStoriesById(idx);
 
   // ####################################################
-  let res = storiesId?.data.filter((stor) => stor.userId == idx);
-  let resStories = res?.map((el) =>
+  let resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
   let obj = resStories?.flat().map((el) => {
