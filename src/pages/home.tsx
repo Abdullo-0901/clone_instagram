@@ -1,21 +1,27 @@
+import React from "react";
 import "stories-react/dist/index.css";
 import "../App.css";
+import { UseGetStoriesById } from "../components/customersHook/storiesHook/useGetStoriesById";
 import { UseGetStories } from "../components/customersHook/storiesHook/useGetStories";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import { useDispatch, useSelector } from "react-redux";
+import FormDialog from "../components/dialog";
+import { setIdx } from "../store/storeSlice";
 import Post from "../components/home/Post";
 import { getToken } from "../utils/token";
-import FormDialog from "../components/dialog";
-// stories
-import "stories-react/dist/index.css";
-import { UseGetStoriesById } from "../components/customersHook/storiesHook/useGetStoriesById";
 import Stories from "stories-react";
+
 function Home() {
+  const [open, setOpen] = React.useState(false);
+  let dispatch = useDispatch();
   const { data } = UseGetUserProfileById();
   const { data: stories } = UseGetStories();
+  let idx = useSelector(({ modal }) => modal.idx);
+  const { data: storiesId } = UseGetStoriesById(idx);
+
   let user = getToken();
-  // stories
-  const { data: storiesId } = UseGetStoriesById();
-  let resStories = storiesId?.data.map((el) =>
+  let res = storiesId?.data.filter((stor) => stor.userId == idx);
+  let resStories = res?.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
   let obj = resStories?.flat().map((el) => {
@@ -25,6 +31,9 @@ function Home() {
       duration: 5000,
     };
   });
+  function handleClose() {
+    setOpen(false);
+  }
 
   return (
     <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
@@ -36,7 +45,12 @@ function Home() {
           {stories?.data.map((storie, id) => {
             return (
               <div key={id}>
-                <button onClick={() => console.log(0)}>
+                <button
+                  onClick={() => {
+                    dispatch(setIdx(storie.userId));
+                    setOpen(true);
+                  }}
+                >
                   <div className="text-center">
                     <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
                       <img
@@ -86,7 +100,7 @@ function Home() {
           </button>
         </div>
       </div>
-      <FormDialog>
+      <FormDialog show={open} handleClose={handleClose}>
         <Stories width="400px" height="600px" stories={obj} />
       </FormDialog>
     </div>

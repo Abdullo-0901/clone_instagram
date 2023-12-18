@@ -14,7 +14,6 @@ const initialState: CounterState = {
   token: tokens ? tokens : "",
   idx: "",
 };
-
 export const slice = createSlice({
   name: "modal",
   initialState,
