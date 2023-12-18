@@ -12,8 +12,7 @@ class getStories {
       },
     );
   }
-}
-class getStoriesById {
+
   async getStoriesById(idx: string) {
     console.log(idx);
 
@@ -27,4 +26,4 @@ class getStoriesById {
     );
   }
 }
-export { getStories, getStoriesById };
+export { getStories };

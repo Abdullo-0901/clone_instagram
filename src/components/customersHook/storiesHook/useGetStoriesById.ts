@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
-import { getStoriesById } from "../../../services/stories/servises-stories";
+import { getStories } from "../../../services/stories/servises-stories";
 export const UseGetStoriesById = (idx: string) => {
-  const getStoriesHookById = new getStoriesById();
+  const getStoriesHookById = new getStories();
   return useQuery(["storiesId"], () => getStoriesHookById.getStoriesById(idx), {
     refetchOnWindowFocus: false,
     select: ({ data }) => data,

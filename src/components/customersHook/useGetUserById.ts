@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
-import { getUserById } from "../../services/post-service";
+import { getUser } from "../../services/post-service";
 import { getToken } from "../../utils/token";
 let userId = getToken();
 export const UseGetUserProfileById = () => {
-  const userService = new getUserById();
+  const userService = new getUser();
   return useQuery(["usersById"], () => userService.getById(userId?.sid), {
     refetchOnWindowFocus: false,
     select: ({ data }) => data,

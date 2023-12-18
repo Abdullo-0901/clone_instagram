@@ -14,8 +14,17 @@ class getPostsService {
     );
   }
 }
-
-class getUserById {
+class getUser {
+  async getUser() {
+    return axios.get<IUser>(
+      `${import.meta.env.VITE_APP_API_URL}User/get-users`,
+      {
+        headers: {
+          Authorization: `Bearer ${token} `,
+        },
+      },
+    );
+  }
   async getById(id: any) {
     return axios.get<getUserByIdInterface>(
       `${
@@ -30,17 +39,4 @@ class getUserById {
   }
 }
 
-class getUser {
-  async getUser() {
-    return axios.get<IUser>(
-      `${import.meta.env.VITE_APP_API_URL}User/get-users`,
-      {
-        headers: {
-          Authorization: `Bearer ${token} `,
-        },
-      },
-    );
-  }
-}
-
-export { getPostsService, getUserById, getUser };
+export { getPostsService, getUser };

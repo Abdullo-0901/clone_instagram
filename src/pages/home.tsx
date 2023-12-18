@@ -14,13 +14,15 @@ import Stories from "stories-react";
 function Home() {
   const [open, setOpen] = React.useState(false);
   let dispatch = useDispatch();
-  const { data } = UseGetUserProfileById();
+  const { data, isLoading: loadingProfile } = UseGetUserProfileById();
   const { data: stories } = UseGetStories();
   let idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
 
   let user = getToken();
   let res = storiesId?.data.filter((stor) => stor.userId == idx);
+  console.log(res);
+
   let resStories = res?.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
@@ -31,10 +33,14 @@ function Home() {
       duration: 5000,
     };
   });
+
   function handleClose() {
     setOpen(false);
   }
 
+  if (loadingProfile) {
+    <h1>Loading ....</h1>;
+  }
   return (
     <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
       <div className=" h-[65px] col-span-4 ">
@@ -42,34 +48,36 @@ function Home() {
           <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
             <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
           </div>
-          {stories?.data.map((storie, id) => {
-            return (
-              <div key={id}>
-                <button
-                  onClick={() => {
-                    dispatch(setIdx(storie.userId));
-                    setOpen(true);
-                  }}
-                >
-                  <div className="text-center">
-                    <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
-                      <img
-                        src={
-                          storie.userPhoto == "" || storie.userPhoto == null
-                            ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
-                            : `${import.meta.env.VITE_APP_FILES_URL}${
-                                storie.userPhoto
-                              }`
-                        }
-                        className="rounded-[30px] w-full h-[55px] border-[2px] border-[white] bg-[white]"
-                        alt=""
-                      />
+          {stories?.data
+            .filter((el) => el.stories.length > 0)
+            .map((storie, id) => {
+              return (
+                <div key={id}>
+                  <button
+                    onClick={() => {
+                      dispatch(setIdx(storie.userId));
+                      setOpen(true);
+                    }}
+                  >
+                    <div className="text-center">
+                      <div className="w-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+                        <img
+                          src={
+                            storie.userPhoto == "" || storie.userPhoto == null
+                              ? "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                              : `${import.meta.env.VITE_APP_FILES_URL}${
+                                  storie.userPhoto
+                                }`
+                          }
+                          className="rounded-[30px] w-full h-[55px] border-[2px] border-[white] bg-[white]"
+                          alt=""
+                        />
+                      </div>
                     </div>
-                  </div>
-                </button>
-              </div>
-            );
-          })}
+                  </button>
+                </div>
+              );
+            })}
         </div>
         <Post />
       </div>
