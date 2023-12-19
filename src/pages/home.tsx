@@ -13,18 +13,23 @@ import Stories from "stories-react";
 
 function Home() {
   const [open, setOpen] = React.useState(false);
-  let dispatch = useDispatch();
+  const
+   dispatch = useDispatch();
   const { data } = UseGetUserProfileById();
   const { data: stories, isLoading: loadingStories } = UseGetStories();
-  let idx = useSelector(({ modal }) => modal.idx);
+  const
+   idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
   console.log(storiesId);
 
-  let user = getToken();
-  let resStories = storiesId?.data.map((el) =>
+  const
+   user = getToken();
+  const
+   resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
-  let obj = resStories?.flat().map((el) => {
+  const
+   obj = resStories?.flat().map((el) => {
     return {
       type: "image",
       url: `${import.meta.env.VITE_APP_FILES_URL}${el.fileName}`,
@@ -37,8 +42,8 @@ function Home() {
   }
 
   return (
-    <div className="container m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
-      <div className=" h-[65px] col-span-4 ">
+    <div className=" m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
+      <div className=" h-[65px] col-span-4  container">
         <div className="flex h-[65px] overflow-hidden gap-4 overflow-x-scroll example ">
           <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
             <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
@@ -80,8 +85,9 @@ function Home() {
         </div>
         <Post />
       </div>
-      <div className="col-span-3 flex flex-col gap-y-4 p-[10px_71px]">
-        <div className="flex items-center gap-3 justify-between w-full">
+      <div className="col-span-3 flex flex-col gap-y-4 p-[10px_71px] ">
+        <div className="flex items-center gap-3 justify-between w-full container  ">
+          <div className="flex gap-4 items-center">
           <div className="w-[50px] rounded-full flex ">
             <img
               className=" rounded-[50%] object-cover w-ful"
@@ -94,6 +100,7 @@ function Home() {
             <p className="text-gray-400 font-[400] text-[15px]">
               {data?.data.fullName}
             </p>
+          </div>
           </div>
 
           <span className="text-[#0798f7] text-[14px] cursor-pointer ml-3">

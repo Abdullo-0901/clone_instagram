@@ -15,18 +15,18 @@ import { useMutation } from "react-query";
 import { getPostsService } from "../../services/post-service";
 const Post = () => {
   const [open, setOpen] = React.useState(false);
-  let idx = useSelector(({ modal }) => modal.idx);
+  const idx = useSelector(({ modal }) => modal.idx);
   const { data, refetch } = UseGetPost();
   const { data: users } = UseGetUser();
   const { data: storiesId } = UseGetStoriesById(idx);
   const postService = new getPostsService();
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // ####################################################
-  let resStories = storiesId?.data.map((el) =>
+  const resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
-  let obj = resStories?.flat().map((el) => {
+  const obj = resStories?.flat().map((el) => {
     return {
       type: "image",
       url: `${import.meta.env.VITE_APP_FILES_URL}${el.fileName}`,
@@ -57,7 +57,7 @@ const Post = () => {
   ) : (
     data?.data.map((el, ind) => {
       return (
-        <div key={ind}>
+        <div key={ind} className="conteiner">
           {users?.data
             .filter((user) => user.id === el.userId)
             .map((user) => (
