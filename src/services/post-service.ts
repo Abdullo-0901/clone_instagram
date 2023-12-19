@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IPost, IUser, getUserByIdInterface } from "../interfaces";
+import { IPost, IUser, getUserByIdInterface, likeId } from "../interfaces";
 let token = window.localStorage.getItem("access_token");
 
 class getPostsService {
@@ -9,6 +9,20 @@ class getPostsService {
       {
         headers: {
           Authorization: `Bearer ${token} `,
+        },
+      },
+    );
+  }
+
+  async like(postId: number) {
+    console.log(postId);
+
+    return axios.post<likeId>(
+      `${import.meta.env.VITE_APP_API_URL}Post/like-post?postId=${postId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       },
     );

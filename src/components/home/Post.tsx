@@ -1,22 +1,26 @@
+import React from "react";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import React from "react";
+import like from "../../assets/like.png";
 import { useDispatch, useSelector } from "react-redux";
 import Stories from "stories-react";
 import comment from "../../assets/comment.png";
 import send from "../../assets/send.png";
+import { setIdx } from "../../store/storeSlice";
+import { UseGetPost } from "../customersHook/post/useGetPosts";
 import { UseGetStoriesById } from "../customersHook/storiesHook/useGetStoriesById";
-import { UseGetPost } from "../customersHook/useGetPosts";
 import { UseGetUser } from "../customersHook/useGetUser";
 import FormDialog from "../dialog";
-import { setIdx } from "../../store/storeSlice";
+import { useMutation } from "react-query";
+import { getPostsService } from "../../services/post-service";
 const Post = () => {
   const [open, setOpen] = React.useState(false);
-  const { data } = UseGetPost();
-  const { data: users } = UseGetUser();
-  let dispatch = useDispatch();
   let idx = useSelector(({ modal }) => modal.idx);
+  const { data, refetch } = UseGetPost();
+  const { data: users } = UseGetUser();
   const { data: storiesId } = UseGetStoriesById(idx);
+  const postService = new getPostsService();
+  let dispatch = useDispatch();
 
   // ####################################################
   let resStories = storiesId?.data.map((el) =>
@@ -31,6 +35,20 @@ const Post = () => {
   });
 
   // ####################################################
+
+  // like  ################################
+
+  const { mutate } = useMutation(
+    ["like"],
+    (idx: number) => postService.like(idx),
+    {
+      async onSuccess() {
+        await refetch();
+      },
+    },
+  );
+
+  // Like###########################
   function handleClose() {
     setOpen(false);
   }
@@ -92,7 +110,29 @@ const Post = () => {
                     />
                     <div className="flex h-[30px] mt-4  justify-between items-center">
                       <div className="flex gap-x-3">
-                        <FavoriteBorderIcon className="cursor-pointer text-red-800" />
+                        {el.postLike ? (
+                          <img
+                            src={like}
+                            alt=""
+                            className="w-[25px] cursor-pointer"
+                            onClick={() => {
+                              mutate(el.postId);
+                            }}
+                          />
+                        ) : (
+                          // className="cursor-pointer text-red-800"
+
+                          <FavoriteBorderIcon
+                            sx={{
+                              ":hover": { color: "red" },
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              mutate(el.postId);
+                            }}
+                            // className="cursor-pointer text-red-800"
+                          />
+                        )}
 
                         <img
                           className="cursor-pointer w-[20px] h-[20px] mt-[2px]"

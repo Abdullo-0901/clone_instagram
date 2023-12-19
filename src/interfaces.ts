@@ -93,3 +93,6 @@ export interface IUser {
 export interface IStories {
   data: Array<userStories>;
 }
+export interface likeId {
+  postId: number;
+}
