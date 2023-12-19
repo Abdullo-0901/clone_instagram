@@ -37,7 +37,7 @@ function Home() {
   }
 
   return (
-    <div className="m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
+    <div className="container m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
       <div className=" h-[65px] col-span-4 ">
         <div className="flex h-[65px] overflow-hidden gap-4 overflow-x-scroll example ">
           <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
