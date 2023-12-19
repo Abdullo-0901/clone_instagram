@@ -17,10 +17,10 @@ export interface EnumDataPostItem {
   postLikeCount: number;
   postView: boolean;
   title: string;
-  userFavorite: any;
+  userFavorite: null | boolean;
   userId: string;
-  userLikes: any;
-  userViews: any;
+  userLikes: null | number;
+  userViews: number;
 }
 
 // object user ##################################
@@ -34,12 +34,12 @@ export interface UserInfoInterface {
 }
 // array stories ###################################
 export interface storiesObj {
-  viewerDto: any;
+  viewerDto: null | string;
   id: number;
-  fileName: any;
-  postId: any;
-  createAt: any;
-  userId: any;
+  fileName: null | string;
+  postId: string;
+  createAt: string;
+  userId: string;
 }
 export interface userStories {
   userId: string;
@@ -95,4 +95,12 @@ export interface IStories {
 }
 export interface likeId {
   postId: number;
+}
+
+
+// Comment
+
+export interface PropsComment{
+  comment: string,
+  postId: number
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { IPost, IUser, getUserByIdInterface, likeId } from "../interfaces";
-let token = window.localStorage.getItem("access_token");
+import { IPost, IUser, PropsComment, getUserByIdInterface, likeId } from "../../interfaces";
+const  token = window.localStorage.getItem("access_token");
 
 class getPostsService {
   async responsePost() {
@@ -27,6 +27,23 @@ class getPostsService {
       },
     );
   }
+  async comment({comment:comment,postId:postId}:PropsComment):Promise<PropsComment> {
+   const response = await axios.post<PropsComment>(
+      `${import.meta.env.VITE_APP_API_URL}Post/add-comment`,
+      {
+        comment:comment,
+        postId:postId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    console.log(response.data);
+    return response.data
+  }
+  
 }
 class getUser {
   async getUser() {
@@ -39,7 +56,7 @@ class getUser {
       },
     );
   }
-  async getById(id: any) {
+  async getById(id: string) {
     return axios.get<getUserByIdInterface>(
       `${
         import.meta.env.VITE_APP_API_URL

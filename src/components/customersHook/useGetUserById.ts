@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getUser } from "../../services/post-service";
+import { getUser } from "../../services/Post/post-service";
 import { getToken } from "../../utils/token";
 let userId = getToken();
 export const UseGetUserProfileById = () => {

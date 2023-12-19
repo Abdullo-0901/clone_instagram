@@ -12,9 +12,10 @@ import { UseGetStoriesById } from "../customersHook/storiesHook/useGetStoriesByI
 import { UseGetUser } from "../customersHook/useGetUser";
 import FormDialog from "../dialog";
 import { useMutation } from "react-query";
-import { getPostsService } from "../../services/post-service";
+import { getPostsService } from "../../services/Post/post-service";
 const Post = () => {
   const [open, setOpen] = React.useState(false);
+  const [com,setCom] = React.useState<string>("")
   const idx = useSelector(({ modal }) => modal.idx);
   const { data, refetch } = UseGetPost();
   const { data: users } = UseGetUser();
@@ -47,15 +48,32 @@ const Post = () => {
       },
     },
   );
+  const { mutate:addComments } = useMutation(
+    ["comment"],
+    (variables: { postId: number; comment: string}) => postService.comment(),
+    {
+      async onSuccess() {
+        await refetch();
+      },
+    },
+  );
+  // Add comment 
+
 
   // Like###########################
   function handleClose() {
     setOpen(false);
   }
+  const  handleComment = async(postId: number)=> {
+    const  objComment ={postId:postId,comment:com}
+    addComments(objComment)
+    dispatch(setIdx(postId))
+  }
   return data?.data.length == 0 ? (
     <h1>Server Error</h1>
   ) : (
     data?.data.map((el, ind) => {
+
       return (
         <div key={ind} className="conteiner">
           {users?.data
@@ -162,11 +180,18 @@ const Post = () => {
                       <span className="cursor-pointer text-[14px] text-gray-500 ">
                         Посмотреть все комментарии ({el.commentCount})
                       </span>
-                      <input
+                     <form onSubmit={(e)=> {
+                      e.preventDefault()
+                      handleComment(el.postId)}
+                      }>
+                     <input
+                        value={com}
+                        onChange={(e) => setCom(e.target.value)}
                         type="text"
                         placeholder="Добавьте комментарий..."
                         className="outline-none text-[14]"
                       />
+                     </form>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getPostsService } from "../../../services/post-service";
+import { getPostsService } from "../../../services/Post/post-service";
 export const UseGetPost = () => {
   const postService = new getPostsService();
   return useQuery(["post"], () => postService.responsePost(), {
@@ -9,9 +9,10 @@ export const UseGetPost = () => {
 };
 // export const UsePostLike = (postId: number) => {
 //   const postService = new getPostsService();
-//   return useMutation(["like"], () => postService.like(postId), {
-//     onSuccess() {
-//       alert("ljilij");
+//   return useMutation(["like"], () => postService.like(postId),
+//   {
+//     async onSuccess() {
+//      console.log(1111);
 //     },
-//   });
+//   },);
 // };
