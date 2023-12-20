@@ -13,23 +13,18 @@ import Stories from "stories-react";
 
 function Home() {
   const [open, setOpen] = React.useState(false);
-  const
-   dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { data } = UseGetUserProfileById();
   const { data: stories, isLoading: loadingStories } = UseGetStories();
-  const
-   idx = useSelector(({ modal }) => modal.idx);
+  const idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
   console.log(storiesId);
 
-  const
-   user = getToken();
-  const
-   resStories = storiesId?.data.map((el) =>
+  const user = getToken();
+  const resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
-  const
-   obj = resStories?.flat().map((el) => {
+  const obj = resStories?.flat().map((el) => {
     return {
       type: "image",
       url: `${import.meta.env.VITE_APP_FILES_URL}${el.fileName}`,
@@ -88,19 +83,19 @@ function Home() {
       <div className="col-span-3 flex flex-col gap-y-4 p-[10px_71px] ">
         <div className="flex items-center gap-3 justify-between w-full container  ">
           <div className="flex gap-4 items-center">
-          <div className="w-[50px] rounded-full flex ">
-            <img
-              className=" rounded-[50%] object-cover w-ful"
-              src={`https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png`}
-              alt=""
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-black font-[500]">{user?.userName}</span>
-            <p className="text-gray-400 font-[400] text-[15px]">
-              {data?.data.fullName}
-            </p>
-          </div>
+            <div className="w-[50px] rounded-full flex ">
+              <img
+                className=" rounded-[50%] object-cover w-ful"
+                src={`https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png`}
+                alt=""
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-black font-[500]">{user?.userName}</span>
+              <p className="text-gray-400 font-[400] text-[15px]">
+                {data?.data.fullName}
+              </p>
+            </div>
           </div>
 
           <span className="text-[#0798f7] text-[14px] cursor-pointer ml-3">

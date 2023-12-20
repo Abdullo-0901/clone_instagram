@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IStories } from "../../interfaces";
-let token = window.localStorage.getItem("access_token");
+const token = window.localStorage.getItem("access_token");
 class getStories {
   async getStories() {
     return axios.get<IStories>(
