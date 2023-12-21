@@ -16,7 +16,7 @@ export default function DialogComment(props: FormDialogProps) {
             "& .MuiPaper-root": {
               width: "100%",
               maxWidth: "900px",
-              height: "80vh",
+              height: "50vh",
               // Set your width here
             },
           },

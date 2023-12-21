@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import Stories from "stories-react";
 import comment from "../../assets/comment.png";
+import Avatar from '@mui/material/Avatar';
 import like from "../../assets/like.png";
 import send from "../../assets/send.png";
 import { PropsComment } from "../../interfaces";
@@ -40,8 +41,13 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const { data: commentId } = useGetPostById(idx);
   const postService = new getPostsService();
   const dispatch = useDispatch();
-  console.log(commentId);
-  console.log(commentId);
+  console.log(commentId?.data?.userId)
+  console.log(users?.data.map(user=>{
+    console.log(user);
+    
+  }));
+  console.log(storiesId);
+  
 
   // ####################################################
   const resStories = storiesId?.data.map((el) =>
@@ -160,6 +166,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       {el.images.map((img, ind) => {
                         return (
                           <SwiperSlide key={ind}>
+                            
                             <img
                               className="w-fit"
                               src={`${
@@ -263,10 +270,11 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
               <Stories width="400px" height="600px" stories={obj} />
             </FormDialog>
           )}
+          
           {openComment && (
             <DialogComment show={openComment} handleClose={handleCloseComment}>
               <div className="grid grid-cols-5 ">
-                <div className="col-span-2 flex items-center h-[80vh]">
+                <div className="col-span-2 flex items-center h-80vh">
                   <Swiper
                     cssMode={true}
                     navigation={true}
@@ -279,9 +287,9 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                     {commentId?.data?.images.map((img, ind) => {
                       return (
                         <SwiperSlide key={ind}>
-                          <div className=" flex items-center">
+                          <div className=" h- flex items-center">
                             <img
-                              className=" bject-cover"
+                              className=" h-[80vh] bject-cover"
                               src={`${
                                 import.meta.env.VITE_APP_FILES_URL
                               }${img}`}
@@ -294,17 +302,35 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                   </Swiper>
                 </div>
                 <div className="col-span-3">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Laboriosam ratione fuga eaque nemo similique ea, vitae rem et,
-                  libero reiciendis culpa officiis dolorum, esse ducimus itaque
-                  dolorem. Repellendus deleniti fugiat, labore animi tempore
-                  repudiandae nesciunt ratione fuga molestias incidunt illum
-                  aliquid corporis eos qui eveniet libero reprehenderit
-                  consectetur. Rem debitis modi, dolorem, veniam et molestias
-                  quaerat nihil nemo, laboriosam neque incidunt aut praesentium
-                  veritatis. Illo, eaque. Quidem placeat neque praesentium quam
-                  iste aliquam reiciendis deserunt quasi, modi sunt facere
-                  aliquid!
+                      <div className="w-full h-[50px] sticky top-0">
+                   
+                    {
+                      users?.data.map(user=>{
+                       return(
+                        <>
+                        {
+                          commentId?.data?.userId == user.id &&(
+                            <div className="flex gap-4 items-center">
+            <div className="w-[50px] rounded-full flex ">
+            <Avatar  sx={{ width: 56, height: 56 }}  src={`${import.meta.env.VITE_APP_FILES_URL}${user.avatar}`} />
+              
+            </div>
+            <div className="flex flex-col">
+              <span className="text-black font-[500]">{user?.userName}</span>
+              <p className="text-gray-400 font-[400] text-[15px]">
+                {user.fullName}
+              </p>
+            </div>
+          </div>
+                          )
+                        }
+                        </>
+                       )
+                        
+                      })
+                    }
+                   
+                      </div>
                 </div>
               </div>
             </DialogComment>
