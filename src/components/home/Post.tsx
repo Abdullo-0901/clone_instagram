@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Stories from "stories-react";
 import comment from "../../assets/comment.png";
 import Avatar from "@mui/material/Avatar";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import like from "../../assets/like.png";
 import send from "../../assets/send.png";
 import { PropsComment } from "../../interfaces";
@@ -41,8 +42,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const { data: commentId } = useGetPostById(idx);
   const postService = new getPostsService();
   const dispatch = useDispatch();
-  console.log(commentId);
-  console.log(commentId);
+ 
 
   // ####################################################
   const resStories = storiesId?.data.map((el) =>
@@ -81,7 +81,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
     },
   );
 
-  console.log(commentId?.data?.images);
+  console.log(commentId?.data?.comments);
 
   // Like###########################
   function handleClose() {
@@ -225,6 +225,9 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                         </span>
                         <span>{el.title}</span>
                       </div>
+                      {el.comments.map((comment, ind) => {
+                        return <span key={ind}>{comment.comment}</span>;
+                      })}
                       <span
                         className="cursor-pointer text-[14px] text-gray-500 "
                         onClick={() => {
@@ -235,9 +238,6 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                         Посмотреть все комментарии ({el.commentCount})
                       </span>
 
-                      {el.comments.splice(2).map((comment, ind) => {
-                        return <span key={ind}>{comment.comment}</span>;
-                      })}
 
                       <form
                         onSubmit={(e) => {
@@ -294,33 +294,103 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                   </Swiper>
                 </div>
                 <div className="col-span-3">
-                  <div className="w-full h-[50px] sticky top-0">
-                    {users?.data.map((user) => {
-                      return (
-                        <>
-                          {commentId?.data?.userId == user.id && (
-                            <div className="flex gap-4 items-center">
+                  <div className="w-full flex items-center justify-between  h-[90px] sticky top-0 p-[10px_15px]">
+                    {
+                      users?.data.filter(user=> user.id === commentId?.data?.userId).map((el,index)=>{
+                        return (
+                          <div key={index} className="flex gap-4 items-center">
+                          <div className="w-[50px] rounded-full flex ">
+                            <Avatar
+                              sx={{ width: 56, height: 56 }}
+                              src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                el.avatar
+                              }`}
+                              className="rounded-[30px] border-[2px] border-[white] bg-[white]"
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-black font-[500]">
+                              {el?.userName}
+                            </span>
+                            <p className="text-gray-400 font-[400] text-[15px]">
+                              {el.fullName}
+                            </p>
+                          </div>
+                        </div>
+                        )
+                      })
+                    }
+                  
+                    <MoreHorizIcon />
+                  </div>
+                  <div className="flex flex-col w-full gap-y-3  p-[10px_15px] ">
+
+                  <div className=" flex items-center justify-between  ">
+                  {
+                      users?.data.filter(user=> user.id === commentId?.data?.userId).map((el,ind)=>{
+                        return (
+                          <div className="flex gap-4 items-center" key={ind}>
+                          <div className="w-[50px] rounded-full flex ">
+                            <Avatar
+                              sx={{ width: 56, height: 56 }}
+                              src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                el.avatar
+                              }`}
+                              className="rounded-[30px] border-[2px] border-[white] bg-[white]"
+                            />
+                          </div>
+                          <div className="flex gap-5">
+                            <span className="text-black font-[500]">
+                              {el?.userName}
+                            </span>
+                            <p className="font-[400] text-[15px]">
+                              {commentId?.data?.title}
+                            </p>
+                          </div>
+                        </div>
+                        )
+                      })
+                  }
+
+                  </div>
+                  {
+                    commentId?.data?.comments.map((com,id)=>{
+                     return(
+                        <div key={id}>
+                        {
+                          users?.data.map((user,ind)=>{
+                           return (
+                          <div key={ind} className="flex flex-col">
+                            {user.id===com.userId &&(
+                              <div className="flex gap-4 items-center">
                               <div className="w-[50px] rounded-full flex ">
                                 <Avatar
                                   sx={{ width: 56, height: 56 }}
                                   src={`${import.meta.env.VITE_APP_FILES_URL}${
                                     user.avatar
                                   }`}
+                                  className="rounded-[30px] border-[2px] border-[white] bg-[white]"
                                 />
                               </div>
-                              <div className="flex flex-col">
+                              <div className="flex gap-5">
                                 <span className="text-black font-[500]">
                                   {user?.userName}
                                 </span>
-                                <p className="text-gray-400 font-[400] text-[15px]">
-                                  {user.fullName}
+                                <p className="font-[400] text-[15px]">
+                                  {commentId?.data?.title}
                                 </p>
                               </div>
                             </div>
-                          )}
-                        </>
-                      );
-                    })}
+                            )}
+                          </div>
+                           )
+                          })
+                        }
+                        </div>
+                      )
+                    
+                    })
+                  }
                   </div>
                 </div>
               </div>
