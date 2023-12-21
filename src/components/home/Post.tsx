@@ -10,19 +10,38 @@ import send from "../../assets/send.png";
 import { PropsComment } from "../../interfaces";
 import { getPostsService } from "../../services/Post/post-service";
 import { setIdx } from "../../store/storeSlice";
-import { UseGetPost } from "../customersHook/post/useGetPosts";
+import { UseGetPost, useGetPostById } from "../customersHook/post/useGetPosts";
 import { UseGetStoriesById } from "../customersHook/storiesHook/useGetStoriesById";
 import { UseGetUser } from "../customersHook/useGetUser";
 import FormDialog from "../dialog";
+import DialogComment from "../dialogComment";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+import "./styles.css";
+
+// import required modules
+import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper/modules";
+
+// import DialogComment from "../dialog-comment";
 const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const [open, setOpen] = React.useState(false);
+  const [openComment, setOpenComment] = React.useState(false);
   const [com, setCom] = React.useState<string>("");
   const idx = useSelector(({ modal }) => modal.idx);
   const { data, refetch } = UseGetPost();
   const { data: users } = UseGetUser();
   const { data: storiesId } = UseGetStoriesById(idx);
+  const { data: commentId } = useGetPostById(idx);
   const postService = new getPostsService();
   const dispatch = useDispatch();
+  console.log(commentId);
+  console.log(commentId);
 
   // ####################################################
   const resStories = storiesId?.data.map((el) =>
@@ -49,6 +68,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       },
     },
   );
+  // Add comment
   const { mutate: addComments } = useMutation(
     ["comment"],
     (data: PropsComment) => postService.comment(data),
@@ -59,20 +79,23 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       },
     },
   );
-  // Add comment
+
+  console.log(commentId?.data?.images);
 
   // Like###########################
   function handleClose() {
     setOpen(false);
+  }
+  function handleCloseComment() {
+    setOpenComment(false);
   }
   const handleComment = async (postId: number) => {
     const objComment = { postId: postId, comment: com };
     addComments(objComment);
     dispatch(setIdx(postId));
   };
-  function handlePostId(postId: number) {
-    dispatch(setIdx(postId));
-    setOpen(true);
+  function handlePostId() {
+    setOpenComment(true);
   }
 
   return data?.data.length == 0 ? (
@@ -124,13 +147,30 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       <span className="h-1 w-1 border border-black bg-black rounded-full "></span>
                     </div>
                   </div>
-                  <div className="mt-4 flex flex-col">
-                    <img
-                      src={`${import.meta.env.VITE_APP_FILES_URL}${
-                        el.images[0]
-                      }`}
-                      alt=""
-                    />
+                  <div className="mt-4 flex flex-col h-[600px]">
+                    <Swiper
+                      cssMode={true}
+                      navigation={true}
+                      pagination={true}
+                      mousewheel={true}
+                      keyboard={true}
+                      modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+                      className="mySwiper"
+                    >
+                      {el.images.map((img, ind) => {
+                        return (
+                          <SwiperSlide key={ind}>
+                            <img
+                              className="w-fit"
+                              src={`${
+                                import.meta.env.VITE_APP_FILES_URL
+                              }${img}`}
+                              alt=""
+                            />
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
                     <div className="flex h-[30px] mt-4  justify-between items-center">
                       <div className="flex gap-x-3">
                         {el.postLike ? (
@@ -187,7 +227,10 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       </div>
                       <span
                         className="cursor-pointer text-[14px] text-gray-500 "
-                        onClick={() => handlePostId(el.postId)}
+                        onClick={() => {
+                          dispatch(setIdx(el.postId));
+                          handlePostId();
+                        }}
                       >
                         Посмотреть все комментарии ({el.commentCount})
                       </span>
@@ -215,13 +258,56 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                 </div>
               </div>
             ))}
-          <FormDialog show={open} handleClose={handleClose}>
-            <Stories width="400px" height="600px" stories={obj} />
-          </FormDialog>
           {open && (
             <FormDialog show={open} handleClose={handleClose}>
-              <h1>hello word</h1>
+              <Stories width="400px" height="600px" stories={obj} />
             </FormDialog>
+          )}
+          {openComment && (
+            <DialogComment show={openComment} handleClose={handleCloseComment}>
+              <div className="grid grid-cols-5 ">
+                <div className="col-span-2 flex items-center h-[80vh]">
+                  <Swiper
+                    cssMode={true}
+                    navigation={true}
+                    pagination={true}
+                    mousewheel={true}
+                    keyboard={true}
+                    modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+                    className="mySwiper"
+                  >
+                    {commentId?.data?.images.map((img, ind) => {
+                      return (
+                        <SwiperSlide key={ind}>
+                          <div className=" flex items-center">
+                            <img
+                              className=" bject-cover"
+                              src={`${
+                                import.meta.env.VITE_APP_FILES_URL
+                              }${img}`}
+                              alt=""
+                            />
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </Swiper>
+                </div>
+                <div className="col-span-3">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Laboriosam ratione fuga eaque nemo similique ea, vitae rem et,
+                  libero reiciendis culpa officiis dolorum, esse ducimus itaque
+                  dolorem. Repellendus deleniti fugiat, labore animi tempore
+                  repudiandae nesciunt ratione fuga molestias incidunt illum
+                  aliquid corporis eos qui eveniet libero reprehenderit
+                  consectetur. Rem debitis modi, dolorem, veniam et molestias
+                  quaerat nihil nemo, laboriosam neque incidunt aut praesentium
+                  veritatis. Illo, eaque. Quidem placeat neque praesentium quam
+                  iste aliquam reiciendis deserunt quasi, modi sunt facere
+                  aliquid!
+                </div>
+              </div>
+            </DialogComment>
           )}
         </div>
       );

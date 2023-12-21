@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginSchemas } from "../../../schemas";
@@ -23,10 +23,13 @@ import { saveToken } from "../../../utils/token";
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [checked, setChecked] = React.useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [erorEP, setErorEP] = React.useState();
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  console.log(loading);
 
   const handleMouseDownPassword = (event: any) => {
     event.preventDefault();
@@ -47,6 +50,7 @@ const LoginForm = () => {
             try {
               setStatus({ success: false });
               setSubmitting(false);
+              setLoading(true);
               const data = await axios.post(
                 `${import.meta.env.VITE_APP_API_URL}Account/login`,
                 {
@@ -54,7 +58,6 @@ const LoginForm = () => {
                   password: values.password,
                 },
               );
-
               if (data.statusText == "OK") {
                 navigate("/home");
                 dispatch(setToken(data.data.data));
@@ -178,6 +181,7 @@ const LoginForm = () => {
                         : null}
                   </FormHelperText>
                 )}
+
                 <Button
                   className="!mt-1"
                   disableElevation
@@ -188,7 +192,7 @@ const LoginForm = () => {
                   variant="contained"
                   color="primary"
                 >
-                  В<span className="!lowercase">ойти</span>
+                  {loading ? "loading..." : "Войти"}
                 </Button>
               </div>
             </form>

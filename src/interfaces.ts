@@ -10,7 +10,7 @@ export interface EnumDataPostItem {
   content: string;
   comments: Array<EnumComentsItems>;
   datePublished: string;
-  images: string;
+  images: [""];
   postFavorite: boolean;
   postId: number;
   postLike: boolean;
@@ -23,6 +23,11 @@ export interface EnumDataPostItem {
   userViews: number;
 }
 
+export interface IPostById {
+  errors: [];
+  data?: EnumDataPostItem | null;
+  statusCode: number;
+}
 // object user ##################################
 export interface UserInfoInterface {
   id: string;
@@ -97,10 +102,9 @@ export interface likeId {
   postId: number;
 }
 
-
 // Comment
 
-export interface PropsComment{
-  comment: string,
-  postId: number
+export interface PropsComment {
+  comment: string;
+  postId: number;
 }

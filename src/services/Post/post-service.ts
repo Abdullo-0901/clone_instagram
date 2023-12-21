@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   IPost,
+  IPostById,
   IUser,
   PropsComment,
   getUserByIdInterface,
@@ -19,10 +20,18 @@ class getPostsService {
       },
     );
   }
+  async getPostById(postId: number) {
+    return axios.get<IPostById>(
+      `${import.meta.env.VITE_APP_API_URL}Post/get-post-by-id?id=${postId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token} `,
+        },
+      },
+    );
+  }
 
   async like(postId: number) {
-    console.log(postId);
-
     return axios.post<likeId>(
       `${import.meta.env.VITE_APP_API_URL}Post/like-post?postId=${postId}`,
       {},
@@ -34,7 +43,6 @@ class getPostsService {
     );
   }
   async comment(data: PropsComment): Promise<PropsComment> {
-    0;
     const response = await axios.post<PropsComment>(
       `${import.meta.env.VITE_APP_API_URL}Post/add-comment`,
       data,

@@ -7,12 +7,19 @@ export const UseGetPost = () => {
     select: ({ data }) => data,
   });
 };
-// export const UsePostLike = (postId: number) => {
-//   const postService = new getPostsService();
-//   return useMutation(["like"], () => postService.like(postId),
-//   {
-//     async onSuccess() {
-//      console.log(1111);
-//     },
-//   },);
-// };
+export const useGetPostById = (idx: number) => {
+  console.log(idx);
+
+  const getPostByIdUser = new getPostsService();
+  const userId = idx;
+  return useQuery(
+    ["postId", userId],
+    () => getPostByIdUser.getPostById(userId),
+
+    {
+      refetchOnWindowFocus: false,
+      select: ({ data }) => data,
+      enabled: !!userId,
+    },
+  );
+};
