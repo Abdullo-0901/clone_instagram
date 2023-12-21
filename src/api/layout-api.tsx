@@ -1,9 +1,9 @@
 import axios from "axios";
 import { getToken } from "../utils/token";
 import { IPost, getUserByIdInterface } from "../interfaces";
-let token = window.localStorage.getItem("access_token");
+const token = window.localStorage.getItem("access_token");
 
-let userId = getToken();
+const userId = getToken();
 console.log(userId?.sid);
 export const layoutApi = async () => {
   try {
