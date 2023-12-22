@@ -59,7 +59,7 @@ class getPostsService {
 class getUser {
   async getUser() {
     return axios.get<IUser>(
-      `${import.meta.env.VITE_APP_API_URL}User/get-users`,
+      `${import.meta.env.VITE_APP_API_URL}User/get-users?PageSize=100`,
       {
         headers: {
           Authorization: `Bearer ${token} `,

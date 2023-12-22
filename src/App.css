@@ -14,3 +14,12 @@ select.input-error {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+
+.dropdown-content {
+  display: none !important;
+}
+.dropdown:hover .dropdown-content {
+  display: block !important;
+  cursor: pointer;
+}

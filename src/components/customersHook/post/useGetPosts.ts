@@ -8,7 +8,6 @@ export const UseGetPost = () => {
   });
 };
 export const useGetPostById = (idx: number) => {
-  console.log(idx);
 
   const getPostByIdUser = new getPostsService();
   const userId = idx;
