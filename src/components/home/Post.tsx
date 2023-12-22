@@ -1,6 +1,6 @@
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Avatar from "@mui/material/Avatar";
 import React from "react";
 import { useMutation } from "react-query";
@@ -17,7 +17,7 @@ import { UseGetStoriesById } from "../customersHook/storiesHook/useGetStoriesByI
 import { UseGetUser } from "../customersHook/useGetUser";
 import FormDialog from "../dialog";
 import DialogComment from "../dialogComment";
-import "../../App.css"
+import "../../App.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -29,7 +29,6 @@ import "./styles.css";
 
 // import required modules
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
-
 // import DialogComment from "../dialog-comment";
 const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const [open, setOpen] = React.useState(false);
@@ -42,7 +41,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const { data: commentId } = useGetPostById(idx);
   const postService = new getPostsService();
   const dispatch = useDispatch();
- 
+
   // ####################################################
   const resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
@@ -57,7 +56,6 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
 
   // ####################################################
 
-  
   // like  ################################
 
   const { mutate } = useMutation(
@@ -80,6 +78,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       },
     },
   );
+console.log(idx);
 
   // Like###########################
   function handleClose() {
@@ -196,6 +195,10 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                         )}
 
                         <img
+                          onClick={() => {
+                            dispatch(setIdx(el.postId));
+                            handlePostId();
+                          }}
                           className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
                           src={comment}
                           alt=""
@@ -235,7 +238,6 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       >
                         Посмотреть все комментарии ({el.commentCount})
                       </span>
-
 
                       <form
                         onSubmit={(e) => {
@@ -292,114 +294,158 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                   </Swiper>
                 </div>
                 <div className="col-span-3">
-                  <div className="w-full flex items-center justify-between  h-[90px] sticky top-0 p-[10px_15px]">
-                    {
-                      users?.data.filter(user=> user.id === commentId?.data?.userId).map((el,index)=>{
+                  <div className="w-full bg-white flex items-center justify-between  h-[90px] sticky top-0 p-[10px_15px]">
+                    {users?.data
+                      .filter((user) => user.id === commentId?.data?.userId)
+                      .map((el, index) => {
                         return (
                           <div key={index} className="flex gap-4 items-center">
-                          <div className="w-[50px] rounded-full flex ">
-                            <Avatar
-                              sx={{ width: 56, height: 56 }}
-                              src={`${import.meta.env.VITE_APP_FILES_URL}${
-                                el.avatar
-                              }`}
-                              className="rounded-[30px] border-[2px] border-[white] bg-[white]"
-                            />
+                            <div className="w-[50px] rounded-full flex ">
+                              <Avatar
+                                sx={{ width: 56, height: 56 }}
+                                src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                  el.avatar
+                                }`}
+                                className="rounded-[30px] border-[2px] border-[white] bg-[white]"
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-black font-[500]">
+                                {el?.userName}
+                              </span>
+                              <p className="text-gray-400 font-[400] text-[15px]">
+                                {el.fullName}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex flex-col">
-                            <span className="text-black font-[500]">
-                              {el?.userName}
-                            </span>
-                            <p className="text-gray-400 font-[400] text-[15px]">
-                              {el.fullName}
-                            </p>
-                          </div>
-                        </div>
-                        )
-                      })
-                    }
-                  
+                        );
+                      })}
+
                     <MoreHorizIcon />
                   </div>
                   <div className="flex flex-col w-full gap-y-3  p-[10px_15px] ">
-
-                  <div className=" flex items-center justify-between  ">
-                  {
-                      users?.data.filter(user=> user.id === commentId?.data?.userId).map((el,ind)=>{
-                        return (
-                          <div className="flex gap-4 items-center" key={ind}>
-                          <div className="w-[50px] rounded-full flex ">
-                            <Avatar
-                              sx={{ width: 56, height: 56 }}
-                              src={`${import.meta.env.VITE_APP_FILES_URL}${
-                                el.avatar
-                              }`}
-                              className="rounded-[30px] border-[2px] border-[white] bg-[white]"
-                            />
-                          </div>
-                          <div className="flex gap-5">
-                            <span className="text-black font-[500]">
-                              {el?.userName}
-                            </span>
-                            <p className="font-[400] text-[15px]">
-                              {commentId?.data?.title}
-                            </p>
-                          </div>
-                        </div>
-                        )
-                      })
-                  }
-
-                  </div>
-                  {
-                    commentId?.data?.comments.map((com,id)=>{
-                     
-                     
-                      
-                     return <div key={id}>
-                        {
-                          users?.data.map((user,ind)=>{
-                            console.log(user.id == "70a7f131-43b6-485e-ba49-eb6ed7e57b0c");
-                            
-                           return <div key={ind} className="flex flex-col">
-                           {user.id === com.userId &&(
-                             <div className="flex items-start gap-4 ">
-                             <div className="w-[50px] rounded-full flex ">
-                             
-                               <Avatar
-                                 sx={{ width: 56, height: 56 }}
-                                 src={`${import.meta.env.VITE_APP_FILES_URL}${
-                                   user.avatar
-                                 }`}
-                                 className="rounded-[30px] border-[2px] border-[white] bg-[white]"
-                               />
-                             </div>
-                             <div className="flex items-start gap-5">
-                              <div className="flex dropdown cursor-pointer flex-col ">
-                              <span className="text-black font-[500]">
-                                 {user?.userName}
-                               </span>
-                               <div  className={`flex cursor-pointer  items-start gap-3  `}>
-                               <p className="text-[13px]">{`${(new Date(com.dateCommented).getHours())}`} minutes</p>
-                                 <MoreHorizIcon className="dropdown-content cursor-pointer" />
-                               </div>
+                    <div className=" flex items-center justify-between  ">
+                      {users?.data
+                        .filter((user) => user.id === commentId?.data?.userId)
+                        .map((el, ind) => {
+                          return (
+                            <div className="flex gap-4 items-center" key={ind}>
+                              <div className="w-[50px] rounded-full flex ">
+                                <Avatar
+                                  sx={{ width: 56, height: 56 }}
+                                  src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                    el.avatar
+                                  }`}
+                                  className="rounded-[30px] border-[2px] border-[white] bg-[white]"
+                                />
                               </div>
-                               <p className="font-[400] text-[15px]">
-                                 {com.comment}
-                               </p>
-                            
-                             </div>
-                           </div>
-                           )}
-                         </div>
-                          })
-                        }
+                              <div className="flex gap-5">
+                                <span className="text-black font-[500]">
+                                  {el?.userName}
+                                </span>
+                                <p className="font-[400] text-[15px]">
+                                  {commentId?.data?.title}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                    {commentId?.data?.comments.map((com, id) => {
+                      return (
+                        <div key={id}>
+                          {users?.data.map((user, ind) => {
+                            return (
+                              <div key={ind} className="flex flex-col">
+                                {user.id === com.userId && (
+                                  <div className="flex items-start gap-4 ">
+                                    <div className="w-[50px] rounded-full flex ">
+                                      <Avatar
+                                        sx={{ width: 56, height: 56 }}
+                                        src={`${
+                                          import.meta.env.VITE_APP_FILES_URL
+                                        }${user.avatar}`}
+                                        className="rounded-[30px] border-[2px] border-[white] bg-[white]"
+                                      />
+                                    </div>
+                                    <div className="flex items-start gap-5">
+                                      <div className="flex dropdown cursor-pointer flex-col ">
+                                        <span className="text-black font-[500]">
+                                          {user?.userName}
+                                        </span>
+                                        <div
+                                          className={`flex cursor-pointer  items-start gap-3  `}
+                                        >
+                                          <p className="text-[13px]">
+                                            {`${new Date(
+                                              com.dateCommented,
+                                            ).getHours()}`}{" "}
+                                            minutes
+                                          </p>
+                                          <MoreHorizIcon className="dropdown-content cursor-pointer" />
+                                        </div>
+                                      </div>
+                                      <p className="font-[400] text-[15px]">
+                                        {com.comment}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                      
-                    
-                    })
-                  }
+                      );
+                    })}
                   </div>
+                 <div className="">
+                 <div className="flex h-[30px] mt-4 margin  justify-between items-center">
+                    <div className="flex gap-x-3 ">
+                      <h1>{el.postId}</h1>
+                      {el.postLike ? (
+                        <img
+                          src={like}
+                          alt=""
+                          className="w-[25px] cursor-pointer"
+                          onClick={() => {
+                            mutate(el.postId);
+                            setIdx(el.postId)
+                          }}
+                        />
+                      ) : (
+                        
+                        <FavoriteBorderIcon
+                          sx={{
+                            ":hover": { color: "red" },
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            mutate(el.postId);
+                          }}
+                          
+                        />
+                      )}
+
+                      <img
+                        onClick={() => {
+                          dispatch(setIdx(el.postId));
+                          handlePostId();
+                        }}
+                        className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
+                        src={comment}
+                        alt=""
+                      />
+                      <img
+                        className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
+                        src={send}
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <BookmarkBorderIcon />
+                    </div>
+                  </div>
+                 </div>
                 </div>
               </div>
             </DialogComment>
