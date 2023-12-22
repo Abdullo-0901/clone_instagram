@@ -78,7 +78,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       },
     },
   );
-console.log(idx);
+  console.log(commentId);
 
   // Like###########################
   function handleClose() {
@@ -95,6 +95,7 @@ console.log(idx);
   function handlePostId() {
     setOpenComment(true);
   }
+console.log(data);
 
   return data?.data.length == 0 ? (
     <h1>Server Error</h1>
@@ -398,54 +399,55 @@ console.log(idx);
                       );
                     })}
                   </div>
-                 <div className="">
-                 <div className="flex h-[30px] mt-4 margin  justify-between items-center">
-                    <div className="flex gap-x-3 ">
-                      <h1>{el.postId}</h1>
-                      {el.postLike ? (
-                        <img
-                          src={like}
-                          alt=""
-                          className="w-[25px] cursor-pointer"
-                          onClick={() => {
-                            mutate(el.postId);
-                            setIdx(el.postId)
-                          }}
-                        />
-                      ) : (
-                        
-                        <FavoriteBorderIcon
-                          sx={{
-                            ":hover": { color: "red" },
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            mutate(el.postId);
-                          }}
-                          
-                        />
-                      )}
+                  <div className="">
+                    <div className="flex h-[30px] mt-4 margin  justify-between items-center">
+                      <div className="flex gap-x-3 ">
+  
 
-                      <img
-                        onClick={() => {
-                          dispatch(setIdx(el.postId));
-                          handlePostId();
-                        }}
-                        className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
-                        src={comment}
-                        alt=""
-                      />
-                      <img
-                        className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
-                        src={send}
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <BookmarkBorderIcon />
+                        {
+                          commentId?.data?.postLike ?
+                        (
+                          <img
+                            src={like}
+                            alt=""
+                            className="w-[25px] cursor-pointer"
+                            onClick={() => {
+                              mutate(el.postId);
+                              setIdx(el.postId);
+                            }}
+                          />
+                        ) : (
+                          <FavoriteBorderIcon
+                            sx={{
+                              ":hover": { color: "red" },
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              mutate(el.postId);
+                            }}
+                          />
+                        )}
+
+                        <img
+                          onClick={() => {
+                            dispatch(setIdx(el.postId));
+                            handlePostId();
+                          }}
+                          className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
+                          src={comment}
+                          alt=""
+                        />
+                        <img
+                          className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
+                          src={send}
+                          alt=""
+                        />
+                      </div>
+                      <div>
+                        <BookmarkBorderIcon />
+                      </div>
                     </div>
                   </div>
-                 </div>
                 </div>
               </div>
             </DialogComment>
