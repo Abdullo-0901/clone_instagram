@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Layout, Profile } from "./routes/routes";
+import { Layout, Profile, UserProfile } from "./routes/routes";
 
 import Loading from "./components/loading";
 import Home from "./pages/home";
@@ -64,6 +64,10 @@ const App = () => {
               <Profile />
             </Suspense>
           ),
+        },
+        {
+          path:"user/id",
+          element:<UserProfile/>
         },
       ],
     },

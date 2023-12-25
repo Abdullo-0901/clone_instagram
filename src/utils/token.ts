@@ -36,7 +36,7 @@ function getToken() {
     const token: string | null = localStorage.getItem("access_token");
     if (token) {
       const decodedToken: { [key: string]: any } = jwt_decode(token);
-      let obj = {
+      const  obj = {
         email: decodedToken.email,
         userName: decodedToken.name,
         exp: decodedToken.exp,

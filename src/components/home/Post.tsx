@@ -287,7 +287,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                           onChange={(e) => setCom(e.target.value)}
                           type="text"
                           placeholder="Добавьте комментарий..."
-                          className="outline-none w-full text-[14]"
+                          className="outline-none w-full text-[14] border-b pb-2 border-gray-300"
                         />
                       </form>
                     </div>

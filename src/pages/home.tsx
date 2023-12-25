@@ -10,12 +10,16 @@ import { setIdx } from "../store/storeSlice";
 import Post from "../components/home/Post";
 import { getToken } from "../utils/token";
 import Stories from "stories-react";
+import { UseGetUser } from "../components/customersHook/useGetUser";
+import Avatar from "@mui/material/Avatar";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const { data } = UseGetUserProfileById();
   const { data: stories, isLoading: loadingStories } = UseGetStories();
+  const {data:users} =  UseGetUser()
   const idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
   console.log(storiesId);
@@ -80,7 +84,7 @@ function Home() {
         </div>
         <Post />
       </div>
-      <div className="w-[400px] flex flex-col  p-[10px] ">
+      <div className="w-[350px] flex flex-col  p-[10px] ">
         <div className="flex items-center gap-3 justify-between w-full   ">
           <div className="flex gap-4 items-center">
             <div className="w-[50px] rounded-full flex ">
@@ -107,6 +111,32 @@ function Home() {
           <button className="text-black hover:text-gray-400 text-[14px]">
             Все
           </button>
+        </div>
+        <div className="flex gap-y-4 flex-col mt-4">
+         {
+           users?.data.slice(1,6).map((user)=>{
+            console.log(user)
+            return(
+            <Link to={`user/${user.id}`}  className="flex  justify-between items-center" key={user.id}>
+             <div className="flex gap-3">
+             <Avatar src={`${import.meta.env.VITE_APP_FILES_URL}${user.avatar}`} />
+              <div className="flex flex-col ">
+                <h1>{user.fullName}</h1>
+              </div>
+             </div>
+             <h1 className="text-blue-500 hover:text-blue-700 cursor-pointer">Подписаться</h1>
+            </Link>
+              
+            )
+          }
+          )
+         }
+        </div>
+        <div className="mt-20 ">
+          <span className="text-gray-300 cursor-pointer ">
+          Информация Помощь Пресса API Вакансии Конфиденциальность Условия Места Язык Meta Verified
+          </span>
+          <p className="mt-3 text-gray-300 cursor-pointer">© 2023 INSTAGRAM FROM META</p>
         </div>
       </div>
       <FormDialog show={open} handleClose={handleClose}>
