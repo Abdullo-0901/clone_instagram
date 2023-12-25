@@ -15,7 +15,7 @@ const Layout = () => {
   return (
     <div className="flex w-full">
       <div className="min-w-[250px]  min-h-[100vh]  border-gray-300">
-        <header className="fixed min-w-[250px] p-[5px_10px]   min-h-[100vh] border-l-2 border flex flex-col gap-y-2  top-0">
+        <header className="fixed min-w-[280px] p-[5px_10px]   min-h-[100vh] border-l-2 border flex flex-col gap-y-2  top-0">
           <Link to={"/home"}>
             <img className="w-[120px] m-[35px_10px]" src={logoText} alt="" />
           </Link>

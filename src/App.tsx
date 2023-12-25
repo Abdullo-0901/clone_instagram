@@ -8,6 +8,8 @@ import Login from "./pages/login";
 import SearchQuery from "./pages/search-query";
 import AuthCheck from "./utils/AuthCheck";
 import ProtectRoute from "./utils/ProtectedRoute";
+import Register from "./pages/register";
+import ForgotPassword from "./pages/forgot-password";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -19,22 +21,22 @@ const App = () => {
         </AuthCheck>
       ),
     },
-    // {
-    //   path: "signup",
-    //   element: (
-    //     <AuthCheck>
-    //       <Register />
-    //     </AuthCheck>
-    //   ),
-    // },
-    // {
-    //   path: "accounts-forgot-password",
-    //   element: (
-    //     <AuthCheck>
-    //       <ForgotPassword />
-    //     </AuthCheck>
-    //   ),
-    // },
+    {
+      path: "signup",
+      element: (
+        <AuthCheck>
+          <Register />
+        </AuthCheck>
+      ),
+    },
+    {
+      path: "accounts-forgot-password",
+      element: (
+        <AuthCheck>
+          <ForgotPassword />
+        </AuthCheck>
+      ),
+    },
     {
       path: "/home",
       element: (

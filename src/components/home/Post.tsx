@@ -2,23 +2,27 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Avatar from "@mui/material/Avatar";
-import React from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import Stories from "stories-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "../../App.css";
 import comment from "../../assets/comment.png";
 import like from "../../assets/like.png";
 import send from "../../assets/send.png";
 import { PropsComment } from "../../interfaces";
 import { getPostsService } from "../../services/Post/post-service";
-import { setIdx } from "../../store/storeSlice";
+import {
+  setEmployeeId,
+  setEmpoleeDeleteId,
+  setIdx,
+} from "../../store/storeSlice";
 import { UseGetPost, useGetPostById } from "../customersHook/post/useGetPosts";
 import { UseGetStoriesById } from "../customersHook/storiesHook/useGetStoriesById";
 import { UseGetUser } from "../customersHook/useGetUser";
-import FormDialog from "../dialog";
-import DialogComment from "../dialogComment";
-import "../../App.css";
-import { Swiper, SwiperSlide } from "swiper/react";
+import FormDialog from "../dialog/dialog";
+import DialogComment from "../dialog/dialogComment";
 
 // Import Swiper styles
 import "swiper/css";
@@ -29,12 +33,21 @@ import "./styles.css";
 
 // import required modules
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
+import AlertDialogSlide from "../dialog/dialog-delete";
+import { getToken } from "../../utils/token";
 // import DialogComment from "../dialog-comment";
 const Post = (): JSX.Element | JSX.Element[] | undefined => {
-  const [open, setOpen] = React.useState(false);
-  const [openComment, setOpenComment] = React.useState(false);
-  const [com, setCom] = React.useState<string>("");
+  const [open, setOpen] = useState(false);
+  const [openComment, setOpenComment] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [openAlertUser, setOpenAlertUser] = useState(false);
+  const [com, setCom] = useState<string>("");
   const idx = useSelector(({ modal }) => modal.idx);
+  const employeId = useSelector(({ modal }) => modal.employeeId);
+  const deleteEmployeComment = useSelector(
+    ({ modal }) => modal.deleteEmployeComment,
+  );
+  const user = getToken();
   const { data, refetch } = UseGetPost();
   const { data: users } = UseGetUser();
   const { data: storiesId } = UseGetStoriesById(idx);
@@ -42,7 +55,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
   const postService = new getPostsService();
   const dispatch = useDispatch();
 
-  // ####################################################
+  // Stories
   const resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
@@ -53,10 +66,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       duration: 5000,
     };
   });
-
-  // ####################################################
-
-  // like  ################################
+  // like
 
   const { mutate } = useMutation(
     ["like"],
@@ -78,15 +88,35 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
       },
     },
   );
-  console.log(commentId);
 
-  // Like###########################
+  // Delete
+  const { mutate: deleteComment } = useMutation(
+    ["delete"],
+    (id: number) => postService.deletePost(id),
+    {
+      async onSuccess() {
+        setOpenAlert(false);
+        setOpenComment(false);
+        await refetch();
+      },
+    },
+  );
+  // HandleClose
   function handleClose() {
     setOpen(false);
   }
   function handleCloseComment() {
     setOpenComment(false);
   }
+  function handleCloseAlert() {
+    setOpenAlert(false);
+  }
+  function handleCloseAlertUser() {
+    console.log(1);
+
+    setOpenAlertUser(false);
+  }
+  // HandleOpen
   const handleComment = async (postId: number) => {
     const objComment = { postId: postId, comment: com };
     addComments(objComment);
@@ -95,32 +125,35 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
   function handlePostId() {
     setOpenComment(true);
   }
-console.log(data);
+  function handleOpenAlert() {
+    setOpenAlert(true);
+  }
+  function handleOpenAlertUser() {
+    setOpenAlertUser(true);
+  }
 
   return data?.data.length == 0 ? (
     <h1>Server Error</h1>
   ) : (
     data?.data.map((el, ind) => {
       return (
-        <div key={ind} className="conteiner">
+        <div key={ind} className="">
           {users?.data
             .filter((user) => user.id === el.userId)
             .map((user) => (
               <div key={user.id}>
                 <div
                   key={el.postId}
-                  className="flex mt-8 flex-col p-[5px_65px]  bg-full"
+                  className="flex mt-8 flex-col p-[5px_65px]"
                 >
-                  <div
-                    className="flex w-full  justify-between items-center h-50px cursor-pointer"
-                    onClick={() => {
-                      dispatch(setIdx(user.id));
-                      setOpen(true);
-                    }}
-                  >
+                  <div className="flex w-full  justify-between items-center h-50px cursor-pointer">
                     <div className="flex items-center">
                       <div className="w-[42px] h-[42px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
                         <img
+                          onClick={() => {
+                            dispatch(setIdx(user.id));
+                            setOpen(true);
+                          }}
                           src={`${import.meta.env.VITE_APP_FILES_URL}${
                             user.avatar
                           }`}
@@ -133,14 +166,17 @@ console.log(data);
                           <span className="cursor-pointer text-black text-[14px] font-[500]">
                             {user.userName}
                           </span>
-                          <span className="text-[13px] text-[#a3a3a3] cursor-pointer">
+                          <span className="text-[14px] text-[#a3a3a3] cursor-pointer">
                             40 мин
                           </span>
                         </div>
                         {/* <span>surah yasin</span> */}
                       </div>
                     </div>
-                    <div className="flex gap-x-1 cursor-pointer">
+                    <div
+                      className="flex gap-x-1 cursor-pointer"
+                      onClick={() => setOpenAlertUser(true)}
+                    >
                       <span className="h-1 w-1 border border-black bg-black rounded-full "></span>
                       <span className="h-1 w-1 border border-black bg-black rounded-full "></span>
                       <span className="h-1 w-1 border border-black bg-black rounded-full "></span>
@@ -251,7 +287,7 @@ console.log(data);
                           onChange={(e) => setCom(e.target.value)}
                           type="text"
                           placeholder="Добавьте комментарий..."
-                          className="outline-none text-[14]"
+                          className="outline-none w-full text-[14]"
                         />
                       </form>
                     </div>
@@ -259,15 +295,11 @@ console.log(data);
                 </div>
               </div>
             ))}
-          {open && (
-            <FormDialog show={open} handleClose={handleClose}>
-              <Stories width="400px" height="600px" stories={obj} />
-            </FormDialog>
-          )}
+
           {openComment && (
             <DialogComment show={openComment} handleClose={handleCloseComment}>
               <div className="grid grid-cols-5 ">
-                <div className="col-span-2 flex items-center h-[80vh]">
+                <div className="col-span-2  flex items-center h-[80vh]">
                   <Swiper
                     cssMode={true}
                     navigation={true}
@@ -282,7 +314,7 @@ console.log(data);
                         <SwiperSlide key={ind}>
                           <div className=" flex items-center">
                             <img
-                              className=" bject-cover"
+                              className=" object-cover"
                               src={`${
                                 import.meta.env.VITE_APP_FILES_URL
                               }${img}`}
@@ -295,7 +327,7 @@ console.log(data);
                   </Swiper>
                 </div>
                 <div className="col-span-3">
-                  <div className="w-full bg-white flex items-center justify-between  h-[90px] sticky top-0 p-[10px_15px]">
+                  <div className="w-full bg-white flex z-[99] items-center justify-between  h-[90px] sticky top-0 p-[10px_15px]">
                     {users?.data
                       .filter((user) => user.id === commentId?.data?.userId)
                       .map((el, index) => {
@@ -322,7 +354,12 @@ console.log(data);
                         );
                       })}
 
-                    <MoreHorizIcon />
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => handleOpenAlertUser()}
+                    >
+                      <MoreHorizIcon />
+                    </div>
                   </div>
                   <div className="flex flex-col w-full gap-y-3  p-[10px_15px] ">
                     <div className=" flex items-center justify-between  ">
@@ -377,13 +414,25 @@ console.log(data);
                                         <div
                                           className={`flex cursor-pointer  items-start gap-3  `}
                                         >
-                                          <p className="text-[13px]">
+                                          <p className="text-[14px]">
                                             {`${new Date(
                                               com.dateCommented,
-                                            ).getHours()}`}{" "}
+                                            ).getHours()}`}
                                             minutes
                                           </p>
-                                          <MoreHorizIcon className="dropdown-content cursor-pointer" />
+                                          <div
+                                            onClick={() => {
+                                              handleOpenAlert();
+                                              dispatch(setEmployeeId(user.id));
+                                              dispatch(
+                                                setEmpoleeDeleteId(
+                                                  com.postCommentId,
+                                                ),
+                                              );
+                                            }}
+                                          >
+                                            <MoreHorizIcon className="dropdown-content cursor-pointer" />
+                                          </div>
                                         </div>
                                       </div>
                                       <p className="font-[400] text-[15px]">
@@ -400,13 +449,9 @@ console.log(data);
                     })}
                   </div>
                   <div className="">
-                    <div className="flex h-[30px] mt-4 margin  justify-between items-center">
+                    <div className="flex p-[5px_14px] h-[30px] mt-4 margin  justify-between items-center">
                       <div className="flex gap-x-3 ">
-  
-
-                        {
-                          commentId?.data?.postLike ?
-                        (
+                        {commentId?.data?.postLike ? (
                           <img
                             src={like}
                             alt=""
@@ -429,10 +474,7 @@ console.log(data);
                         )}
 
                         <img
-                          onClick={() => {
-                            dispatch(setIdx(el.postId));
-                            handlePostId();
-                          }}
+                          onClick={() => {}}
                           className="cursor-pointer w-[20px] h-[20px] mt-[2px]"
                           src={comment}
                           alt=""
@@ -451,6 +493,72 @@ console.log(data);
                 </div>
               </div>
             </DialogComment>
+          )}
+
+          {openAlert && (
+            <AlertDialogSlide show={openAlert} handleClose={handleCloseAlert}>
+              <div className="">
+                <p className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]">
+                  Пожаловаться
+                </p>
+                {user?.sid == employeId && (
+                  <p
+                    onClick={() => deleteComment(deleteEmployeComment)}
+                    className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]"
+                  >
+                    Удалить
+                  </p>
+                )}
+                <p className=" text-center text-[16px] cursor-pointer  p-[6px_0] w-[350px]">
+                  Отмена
+                </p>
+              </div>
+            </AlertDialogSlide>
+          )}
+          {openAlertUser && (
+            <AlertDialogSlide
+              show={openAlertUser}
+              handleClose={handleCloseAlertUser}
+            >
+              <div className="">
+                <p className=" text-center border-b-2 border-gray-200 text-[14px]  font-[500] cursor-pointer  p-[8px_0] text-[#ef5e6a] w-[350px]">
+                  Пожаловаться
+                </p>
+                <p className=" text-center border-b-2 border-gray-200 text-[14px]  font-[500] cursor-pointer  p-[8px_0] text-[#ef5e6a] w-[350px]">
+                  Отменит потписку
+                </p>
+
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Добавить изображение
+                </p>
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Перейти к публикацию
+                </p>
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Поделиться...
+                </p>
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Копировать ссылку
+                </p>
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Вставить на сайт
+                </p>
+                <p className=" text-center text-[14px] cursor-pointer border-b-2 border-gray-200  p-[8px_0] w-[350px]">
+                  Об акаунте
+                </p>
+                <p
+                  onClick={() => setOpenAlertUser(false)}
+                  className=" text-center text-[14px] cursor-pointer  p-[8px_0] w-[350px]"
+                >
+                  Отмена
+                </p>
+              </div>
+            </AlertDialogSlide>
+          )}
+          {open && (
+            <FormDialog show={open} handleClose={handleClose}>
+              <Stories width="400px" height="600px" stories={obj} />
+            </FormDialog>
           )}
         </div>
       );

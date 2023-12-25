@@ -6,13 +6,17 @@ export interface CounterState {
   user: null;
   token: string;
   idx: string | number;
+  employeeId: string;
+  deleteEmployeComment: number | string;
 }
-let tokens = localStorage.getItem("access_token");
+const tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
   openAddModal: false,
   user: null,
   token: tokens ? tokens : "",
   idx: "",
+  employeeId: "",
+  deleteEmployeComment: "",
 };
 export const slice = createSlice({
   name: "modal",
@@ -28,8 +32,24 @@ export const slice = createSlice({
     setIdx: (state, action: PayloadAction<string | number>) => {
       state.idx = action.payload;
     },
+    setEmployeeId: (state, action: PayloadAction<string>) => {
+      console.log(action.payload);
+
+      state.employeeId = action.payload;
+      console.log(state.employeeId);
+    },
+    setEmpoleeDeleteId: (state, action: PayloadAction<string | number>) => {
+      state.deleteEmployeComment = action.payload;
+    },
   },
 });
 
 export default slice.reducer;
-export const { openModal, logout, setIdx, setToken } = slice.actions;
+export const {
+  openModal,
+  logout,
+  setIdx,
+  setToken,
+  setEmployeeId,
+  setEmpoleeDeleteId,
+} = slice.actions;

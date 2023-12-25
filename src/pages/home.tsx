@@ -5,7 +5,7 @@ import { UseGetStoriesById } from "../components/customersHook/storiesHook/useGe
 import { UseGetStories } from "../components/customersHook/storiesHook/useGetStories";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import { useDispatch, useSelector } from "react-redux";
-import FormDialog from "../components/dialog";
+import FormDialog from "../components/dialog/dialog";
 import { setIdx } from "../store/storeSlice";
 import Post from "../components/home/Post";
 import { getToken } from "../utils/token";
@@ -37,9 +37,9 @@ function Home() {
   }
 
   return (
-    <div className=" m-[35px_10px] p-[10px] pl-[100px] w-full grid grid-cols-7  gap-16  ">
-      <div className=" h-[65px] col-span-4  container">
-        <div className="flex h-[65px] overflow-hidden gap-4 overflow-x-scroll example ">
+    <div className="w-[1400px] m-[35px_auto] p-[10px] pl-[100px] flex   ">
+      <div className=" h-[65px] w-[700px] ">
+        <div className="flex  h-[65px] overflow-hidden gap-4 overflow-x-scroll example ">
           <div className="w-[60px] h-[60px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
             <button className="rounded-[30px] w-[55px] h-[55px] border-[2px] border-[white] bg-[white]"></button>
           </div>
@@ -80,8 +80,8 @@ function Home() {
         </div>
         <Post />
       </div>
-      <div className="col-span-3 flex flex-col gap-y-4 p-[10px_71px] ">
-        <div className="flex items-center gap-3 justify-between w-full container  ">
+      <div className="w-[400px] flex flex-col  p-[10px] ">
+        <div className="flex items-center gap-3 justify-between w-full   ">
           <div className="flex gap-4 items-center">
             <div className="w-[50px] rounded-full flex ">
               <img
