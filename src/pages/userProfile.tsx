@@ -35,6 +35,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { UseGetUser } from "../components/customersHook/useGetUser";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import Save from "../components/profile/Save";
+import Tagged from "../components/profile/Tagged";
 
 const style = {
   position: "absolute",
@@ -391,6 +393,21 @@ const UserProfile = () => {
               </h1>
             </div>
           </button>
+        </div>
+
+
+        <div className="w-[80%] m-auto">
+          
+          {visit === "save" && (
+            <div className="">
+              <Save  />
+            </div>
+          )}
+          {visit === "tagged" && (
+            <div className="">
+              <Tagged />
+            </div>
+          )}
         </div>
 
         <div className="">
