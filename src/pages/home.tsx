@@ -15,9 +15,10 @@ import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 
 function Home() {
+  const dataUser = getToken()
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const { data } = UseGetUserProfileById();
+  const { data } = UseGetUserProfileById(dataUser?.sid);
   const { data: stories, isLoading: loadingStories } = UseGetStories();
   const {data:users} =  UseGetUser()
   const idx = useSelector(({ modal }) => modal.idx);

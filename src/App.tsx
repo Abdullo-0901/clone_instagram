@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Layout, Profile, UserProfile } from "./routes/routes";
+import { Layout, Profile } from "./routes/routes";
 
 import Loading from "./components/loading";
 import Home from "./pages/home";
@@ -10,6 +10,7 @@ import AuthCheck from "./utils/AuthCheck";
 import ProtectRoute from "./utils/ProtectedRoute";
 import Register from "./pages/register";
 import ForgotPassword from "./pages/forgot-password";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -66,7 +67,7 @@ const App = () => {
           ),
         },
         {
-          path:"user/id",
+          path:"user/:id",
           element:<UserProfile/>
         },
       ],
