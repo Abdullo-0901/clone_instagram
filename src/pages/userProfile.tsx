@@ -1,14 +1,13 @@
-
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 // import Button from "../components/ui/button";
 
 // const UserProfile = () => {
 //   const {id}  = useParams();
 //   console.log(typeof(id));
-  
+
 //   const {data} = UseGetUserProfileById(id)
 //     console.log(data);
-    
+
 //   return (
 //     <div className="container w-full">
 //       <div className="w-[900px] m-[5px_auto] ">
@@ -28,9 +27,6 @@ import Avatar from '@mui/material/Avatar';
 // }
 
 // export default UserProfile
-
-
-
 
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
@@ -65,8 +61,8 @@ const style2 = {
 
 const UserProfile = () => {
   const { id } = useParams();
-    const {data} = UseGetUser()
-    const {data:profileById} = UseGetUserProfileById(id)
+  const { data } = UseGetUser();
+  const { data: profileById } = UseGetUserProfileById(id);
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -83,29 +79,28 @@ const UserProfile = () => {
   const handleOpen4 = () => setOpen4(true);
   const handleClose4 = () => setOpen4(false);
 
-
   const [visit, setVisit] = useState("post");
   const [links, setLink] = useState("publ");
 
-console.log(visit);
+  console.log(visit);
 
-  
   return (
     <div className="m-[0_auto]">
       <div className="">
         <div className="wrapper-user max-w-[1280px] mx-auto">
           <div className="flex ml-[80px] justify-center ">
             <div className="mt-[20px]">
-            <Avatar
-    src={`${import.meta.env.VITE_APP_FILES_URL}${profileById?.data.image}`}
-    sx={{ width: 106, height: 106 }}
-    />
+              <Avatar
+                src={`${import.meta.env.VITE_APP_FILES_URL}${profileById?.data
+                  .image}`}
+                sx={{ width: 106, height: 106 }}
+              />
             </div>
 
             <div className="mt-[30px] ml-[100px]">
               <div className="setting w-[613px]  items-center  flex">
                 <h1 className="pr-[25px] text-[20px] font-[400]">
-                 {profileById?.data.userName}
+                  {profileById?.data.userName}
                 </h1>
 
                 {data?.data.map((element) => {
@@ -201,10 +196,7 @@ console.log(visit);
               <div className="flex gap-[38px] mt-[20px]">
                 <div className="flex gap-[7px]">
                   <h1>{profileById?.data.subscribersCount} </h1>
-                  <h1 className="">
-                    {" "}
-                    публикаций
-                  </h1>
+                  <h1 className=""> публикаций</h1>
                 </div>
                 <div className="flex gap-[7px]">
                   <h1
@@ -217,14 +209,14 @@ console.log(visit);
                   </h1>
                 </div>
                 <div className="flex gap-[7px]">
-                 {profileById?.data.subscriptionsCount}
+                  {profileById?.data.subscriptionsCount}
                   <h1 onClick={handleOpen3} className="cursor-pointer">
                     подписок
                   </h1>
                 </div>
               </div>
 
-              <div className="mt-[20px]">  {profileById?.data.fullName}</div>
+              <div className="mt-[20px]"> {profileById?.data.fullName}</div>
             </div>
           </div>
         </div>
@@ -401,8 +393,6 @@ console.log(visit);
           </button>
         </div>
 
-      
-
         <div className="">
           <Modal
             open={open}
@@ -460,7 +450,9 @@ console.log(visit);
                     />
                   </div>
                   <div className="mt-[10px] px-[18px] h-[300px] overflow-y-auto">
-                    <h1>hqwddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddello</h1>
+                    <h1>
+                      hqwddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddello
+                    </h1>
                     {/* <img className="w-[40px] h-[40px] rounded-[100%]" src={`${import.meta.env.VITE_APP_FILES_URL}${profileById.image}`} alt="" /> */}
 
                     {/* {subsciption.map((e) => {
