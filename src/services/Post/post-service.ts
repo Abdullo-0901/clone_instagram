@@ -10,7 +10,7 @@ const token = window.localStorage.getItem("access_token");
 class getPostsService {
   async responsePost() {
     return axios.get<IPost>(
-      `${import.meta.env.VITE_APP_API_URL}Post/get-posts`,
+      `${import.meta.env.VITE_APP_API_URL}Post/get-posts?PageSize=100`,
       {
         headers: {
           Authorization: `Bearer ${token} `,

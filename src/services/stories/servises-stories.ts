@@ -13,8 +13,7 @@ class getStories {
     );
   }
 
-  async getStoriesById(idx: string) {
-    console.log(idx);
+  async getStoriesById(idx?: string) {
 
     return axios.get<IStories>(
       `${import.meta.env.VITE_APP_API_URL}Story/get-stories?userId=${idx}`,

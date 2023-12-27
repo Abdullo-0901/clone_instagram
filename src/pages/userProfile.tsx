@@ -37,6 +37,7 @@ import { UseGetUser } from "../components/customersHook/useGetUser";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import Save from "../components/profile/Save";
 import Tagged from "../components/profile/Tagged";
+import Publ from "../components/profile/Publ";
 
 const style = {
   position: "absolute",
@@ -227,12 +228,12 @@ const UserProfile = () => {
 
         <div className="w-[80%] justify-center gap-[70px] mt-[0px] flex m-auto ">
           <button onClick={() => setVisit("post")}>
-            <div className="">
+            <div  className="">
               {links === "publ" && (
                 <div className="border-y-[1.5px] border-[black]  "></div>
               )}
             </div>
-            <div className="flex mt-[15px] gap-[5px] text-[#737373] items-center">
+            <div    className="flex mt-[15px] gap-[5px] text-[#737373] items-center">
               <svg
                 className="hover:text-[black]"
                 aria-label=""
@@ -398,6 +399,13 @@ const UserProfile = () => {
 
         <div className="w-[80%] m-auto">
           
+          {
+            visit === "post" && (
+              <div>
+                <Publ id={id} />
+              </div>
+            )
+          }
           {visit === "save" && (
             <div className="">
               <Save  />

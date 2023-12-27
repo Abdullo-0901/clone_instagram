@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getStories } from "../../../services/stories/servises-stories";
-export const UseGetStoriesById = (idx: string) => {
+export const UseGetStoriesById = (idx?: string) => {
   const getStoriesHookById = new getStories();
   const  userId = idx;
   return useQuery(

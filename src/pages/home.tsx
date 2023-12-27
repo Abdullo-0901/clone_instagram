@@ -19,13 +19,14 @@ function Home() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const { data } = UseGetUserProfileById(dataUser?.sid);
+  console.log(data);
+  
   const { data: stories, isLoading: loadingStories } = UseGetStories();
   const {data:users} =  UseGetUser()
   const idx = useSelector(({ modal }) => modal.idx);
   const { data: storiesId } = UseGetStoriesById(idx);
-  console.log(storiesId);
-
-  const user = getToken();
+  console.log(storiesId)
+  
   const resStories = storiesId?.data.map((el) =>
     el.stories.filter((elem) => elem.fileName != null),
   );
@@ -96,7 +97,7 @@ function Home() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-black font-[500]">{user?.userName}</span>
+              <span className="text-black font-[500]">{dataUser?.userName}</span>
               <p className="text-gray-400 font-[400] text-[15px]">
                 {data?.data.fullName}
               </p>
@@ -116,7 +117,7 @@ function Home() {
         <div className="flex gap-y-4 flex-col mt-4">
          {
            users?.data.slice(1,6).map((user)=>{
-            console.log(user)
+            
             return(
             <Link to={`user/${user.id}`}  className="flex  justify-between items-center" key={user.id}>
              <div className="flex gap-3">
