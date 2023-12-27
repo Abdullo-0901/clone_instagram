@@ -22,4 +22,5 @@ select.input-error {
 .dropdown:hover .dropdown-content {
   display: block !important;
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.275);
 }

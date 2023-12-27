@@ -190,7 +190,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       mousewheel={true}
                       keyboard={true}
                       modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-                      className="mySwiper"
+                      // className="mySwiper"
                     >
                       {el.images.map((img, ind) => {
                         return (
