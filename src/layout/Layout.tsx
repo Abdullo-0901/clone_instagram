@@ -1,11 +1,16 @@
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
+import OpenLeft from "../components/dialog/openleft";
 import { navbar } from "../components/navbar";
+import { setopenLeft } from "../store/storeSlice";
 import { destroyToken, isValidToken } from "../utils/token";
 const Layout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
+const openleft = useSelector(({ modal }) => modal.openleft)
   useEffect(() => {
     if (isValidToken()) {
       destroyToken();
@@ -19,16 +24,35 @@ const Layout = () => {
           <Link to={"/home"}>
             <img className="w-[120px] m-[35px_10px]" src={logoText} alt="" />
           </Link>
-          {navbar.map((el) => {
+          {navbar.map((el,ind) => {
             return (
-              <Link
+              <div key={ind}>
+                {
+                  el.title == "Поисковый запрос" ? 
+                <Link
+
+                onClick={()=>dispatch(setopenLeft(openleft ? false : true))}
                 className="flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl"
                 to={el.path}
                 key={el.id}
               >
                 <span>{el.icons}</span>
-                <span> {el.title}</span>
+                {
+                  openleft ? <span className="hidden"> {el.title}</span> :<span> {el.title}</span>
+                }
+                
+              </Link>:   <Link
+                className="flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl"
+                to={el.path}
+                key={el.id}
+              >
+                <span>{el.icons}</span>
+                {
+                  openleft ? <span className="hidden"> {el.title}</span> :<span> {el.title}</span>
+                }
               </Link>
+                }
+              </div>
             );
           })}
           <Link
@@ -47,6 +71,13 @@ const Layout = () => {
             <span className="text-black font-600">Профиль</span>
           </Link>
         </header>
+
+        {
+           openleft &&(
+            <OpenLeft />
+            
+           )
+        }
       </div>
       <Outlet />
     </div>

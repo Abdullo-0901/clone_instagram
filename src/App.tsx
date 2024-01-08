@@ -55,7 +55,7 @@ const App = () => {
           ),
         },
         {
-          path: "search",
+          path: "/home",
           element: <SearchQuery />,
         },
         {

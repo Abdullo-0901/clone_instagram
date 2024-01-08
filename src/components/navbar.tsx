@@ -16,7 +16,7 @@ export const navbar = [
     title: "Поисковый запрос",
     id: 2,
     icons: <SearchIcon />,
-    path: "search",
+    path: "",
   },
   {
     title: "Интересное",

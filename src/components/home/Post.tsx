@@ -148,7 +148,7 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                 >
                   <div className="flex w-full  justify-between items-center h-50px cursor-pointer">
                     <div className="flex items-center">
-                      <div className="w-[42px] h-[42px] bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
+                      <div className="w-[42px] h-[42px]  bg-gradient-to-r from-fuchsia-500 via-red-600 to-orange-400 rounded-[30px] p-[2px]">
                         <img
                           onClick={() => {
                             dispatch(setIdx(user.id));
@@ -195,13 +195,15 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       {el.images.map((img, ind) => {
                         return (
                           <SwiperSlide key={ind}>
-                            <img
+<div className="relative h-[400px]">
+<img
                               className="w-fit"
                               src={`${
                                 import.meta.env.VITE_APP_FILES_URL
                               }${img}`}
                               alt=""
                             />
+</div>
                           </SwiperSlide>
                         );
                       })}
