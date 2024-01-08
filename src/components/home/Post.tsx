@@ -195,15 +195,17 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                       {el.images.map((img, ind) => {
                         return (
                           <SwiperSlide key={ind}>
-<div className="relative h-[400px]">
-<img
-                              className="w-fit"
-                              src={`${
-                                import.meta.env.VITE_APP_FILES_URL
-                              }${img}`}
-                              alt=""
-                            />
-</div>
+                            <div className="relative h-96">
+                          
+                            <img
+                                className="w-fit h-full"
+                                src={`${
+                                  import.meta.env.VITE_APP_FILES_URL
+                                }${img}`}
+                                alt=""
+                              />
+                          
+                            </div>
                           </SwiperSlide>
                         );
                       })}

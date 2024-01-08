@@ -11,6 +11,7 @@ import ProtectRoute from "./utils/ProtectedRoute";
 import Register from "./pages/register";
 import ForgotPassword from "./pages/forgot-password";
 import UserProfile from "./pages/UserProfile";
+import Interesting from "./pages/interesting";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -69,6 +70,10 @@ const App = () => {
         {
           path:"user/:id",
           element:<UserProfile/>
+        },
+        {
+          path:"intersting",
+          element:<Interesting/>
         },
       ],
     },

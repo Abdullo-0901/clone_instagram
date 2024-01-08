@@ -22,7 +22,7 @@ export const navbar = [
     title: "Интересное",
     id: 3,
     icons: <ExploreIcon />,
-    path: "/intersting",
+    path: "intersting",
   },
   {
     title: "Reels",
