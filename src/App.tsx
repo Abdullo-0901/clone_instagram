@@ -12,6 +12,7 @@ import Register from "./pages/register";
 import ForgotPassword from "./pages/forgot-password";
 import UserProfile from "./pages/UserProfile";
 import Interesting from "./pages/interesting";
+import Reels from "./pages/reels";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -74,6 +75,10 @@ const App = () => {
         {
           path:"intersting",
           element:<Interesting/>
+        },
+        {
+          path:"reels",
+          element:<Reels/>
         },
       ],
     },

@@ -28,7 +28,7 @@ export const navbar = [
     title: "Reels",
     id: 4,
     icons: <VideoCameraBackIcon />,
-    path: "/reels",
+    path: "reels",
   },
   {
     title: "Сообщения",

@@ -49,20 +49,32 @@ class getPostsService {
           Authorization: `Bearer ${token}`,
         },
       },
-    );
-    console.log(response.data);
-    return response.data;
-  }
-  async deletePost(id: number) {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}Post/delete-comment?commentId=${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      );
+      console.log(response.data);
+      return response.data;
+    }
+    async deletePost(id: number) {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_APP_API_URL}Post/delete-comment?commentId=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    );
-    return response.data;
+        );
+        return response.data;
+      }
+      async postFavorite(id:number){
+        
+        return axios.post<likeId>(
+          `${import.meta.env.VITE_APP_API_URL}/Post/add-post-favorite${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
   }
 }
 

@@ -36,6 +36,9 @@ const Interesting = () => {
   const employeId = useSelector(({ modal }) => modal.employeeId);
   const openEditOrDeleteModal = useSelector( ({ modal }) => modal.openEditOrDeleteModal);
 
+  console.log(idxEditOrDelete);
+  
+
   const idx = useSelector(({ modal }) => modal.idx);
   const { data } = UseGetPost();
   const { data: postById } = useGetPostById(idx);
@@ -132,12 +135,16 @@ const Interesting = () => {
             <div className="grid grid-cols-5 ">
               <div className="col-span-2  flex items-center h-[80vh]">
                 <div className=" flex items-center">
+                  {
+                    postById?.data?.images[0].slice(-3) == "MP4" ? <video  src={`${import.meta.env.VITE_APP_FILES_URL}${postById?.data
+                      ?.images[0]}`}  controls/>:
                   <img
-                    className=" object-cover"
+                    className=""
                     src={`${import.meta.env.VITE_APP_FILES_URL}${postById?.data
                       ?.images[0]}`}
                     alt=""
                   />
+                  }
                 </div>
               </div>
               <div className="col-span-3">
@@ -321,7 +328,7 @@ const Interesting = () => {
               Пожаловаться
             </p>
             
-            {user?.sid == employeId && (
+            {user?.sid == idxEditOrDelete && (
               <p
                 onClick={() => deleteComment(idxEditOrDelete)}
                 className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]"
