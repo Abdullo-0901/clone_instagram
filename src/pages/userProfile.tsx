@@ -476,7 +476,7 @@ const UserProfile = () => {
                   </div>
                   <div className="mt-[10px] px-[18px] h-[300px] overflow-y-auto">
                     <h1>
-                      hqwddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddello
+          r
                     </h1>
                     {/* <img className="w-[40px] h-[40px] rounded-[100%]" src={`${import.meta.env.VITE_APP_FILES_URL}${profileById.image}`} alt="" /> */}
 
