@@ -8,7 +8,9 @@ export interface CounterState {
   idx: string | number;
   employeeId: string;
   deleteEmployeComment: number | string;
-  openleft:boolean;
+  openleft: boolean;
+  openEditOrDeleteModal: boolean;
+  idxEditOrDelete: string | number;
 }
 const tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
@@ -18,7 +20,9 @@ const initialState: CounterState = {
   idx: "",
   employeeId: "",
   deleteEmployeComment: "",
-  openleft:false,
+  idxEditOrDelete: "",
+  openleft: false,
+  openEditOrDeleteModal: false,
 };
 export const slice = createSlice({
   name: "modal",
@@ -43,9 +47,15 @@ export const slice = createSlice({
     setEmpoleeDeleteId: (state, action: PayloadAction<string | number>) => {
       state.deleteEmployeComment = action.payload;
     },
-    setopenLeft:(state,action: PayloadAction<boolean>) => {
+    setIdxEditOrDelete: (state, action: PayloadAction<string | number>) => {
+      state.idxEditOrDelete = action.payload;
+    },
+    setopenLeft: (state, action: PayloadAction<boolean>) => {
       state.openleft = action.payload;
-    }
+    },
+    setOpenEditOrDeleteModal: (state, action: PayloadAction<boolean>) => {
+      state.openEditOrDeleteModal = action.payload;
+    },
   },
 });
 
@@ -57,5 +67,7 @@ export const {
   setToken,
   setEmployeeId,
   setEmpoleeDeleteId,
-  setopenLeft
+  setopenLeft,
+  setOpenEditOrDeleteModal,
+  setIdxEditOrDelete,
 } = slice.actions;

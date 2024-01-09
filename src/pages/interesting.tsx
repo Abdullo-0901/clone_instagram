@@ -4,7 +4,14 @@ import {
   useGetPostById,
 } from "../components/customersHook/post/useGetPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { openModal, setIdx } from "../store/storeSlice";
+import {
+  openModal,
+  setEmpoleeDeleteId,
+  setIdx,
+  setIdxEditOrDelete,
+  setOpenEditOrDeleteModal,
+
+} from "../store/storeSlice";
 import DialogComment from "../components/dialog/dialogComment";
 import { UseGetUser } from "../components/customersHook/useGetUser";
 import Avatar from "@mui/material/Avatar";
@@ -14,6 +21,10 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import like from "../assets/like.png";
 import comment from "../assets/comment.png";
 import send from "../assets/send.png";
+import AlertDialogSlide from "../components/dialog/dialog-delete";
+import { getToken } from "../utils/token";
+import { useMutation } from "react-query";
+import { getPostsService } from "../services/Post/post-service";
 type BoxState = {
   open: boolean;
   postId: number | string;
@@ -21,11 +32,28 @@ type BoxState = {
 const Interesting = () => {
   const [boxStates, setBoxStates] = useState<BoxState[]>([]);
   const openAddModal = useSelector(({ modal }) => modal.openAddModal);
+  const idxEditOrDelete = useSelector(({ modal }) => modal.idxEditOrDelete);
+  const employeId = useSelector(({ modal }) => modal.employeeId);
+  const openEditOrDeleteModal = useSelector( ({ modal }) => modal.openEditOrDeleteModal);
+
   const idx = useSelector(({ modal }) => modal.idx);
   const { data } = UseGetPost();
   const { data: postById } = useGetPostById(idx);
   const { data: users } = UseGetUser();
   const dispatch = useDispatch();
+  const user = getToken();
+
+  const postService = new getPostsService();
+  const { mutate: deleteComment ,} = useMutation(
+    ["delete"],
+    (id: number) => postService.deletePost(id),
+    {
+      async onSuccess() {
+        setOpenEditOrDeleteModal(false);
+
+      },
+    },
+  );
 
   const handleMouseOver = (index: number, postId: number | string) => {
     setBoxStates((prevStates) => {
@@ -46,6 +74,14 @@ const Interesting = () => {
   const handleClose = () => {
     dispatch(openModal(false));
   };
+  const handleCloseAlert = () => {
+    dispatch(setOpenEditOrDeleteModal(false));
+  };
+  console.log(user?.sid == employeId);
+  console.log(user?.sid);
+  console.log(employeId);
+  
+  
   return (
     <div className="w-[1400px] m-[35px_auto] p-[10px] pl-[100px] flex">
       <div className="grid grid-cols-3">
@@ -164,7 +200,7 @@ const Interesting = () => {
                         );
                       })}
                   </div>
-                  {postById?.data?.comments.map((com, id) => {
+                  {postById?.data?.comments.map((com, id) => {  
                     return (
                       <div key={id}>
                         {users?.data.map((user, ind) => {
@@ -196,15 +232,19 @@ const Interesting = () => {
                                           minutes
                                         </p>
                                         <div
-                                        // onClick={() => {
-                                        //   handleOpenAlert();
-                                        //   dispatch(setEmployeeId(user.id));
-                                        //   dispatch(
-                                        //     setEmpoleeDeleteId(
-                                        //       com.postCommentId,
-                                        //     ),
-                                        //   );
-                                        // }}
+                                          onClick={() => {
+                                            dispatch(
+                                              setIdxEditOrDelete(user.id),
+                                            );
+                                            dispatch(
+                                              setEmpoleeDeleteId(
+                                                com.userId
+                                              ),
+                                            );
+                                            dispatch(
+                                              setOpenEditOrDeleteModal(true),
+                                            );
+                                          }}
                                         >
                                           <MoreHorizIcon className="dropdown-content cursor-pointer" />
                                         </div>
@@ -269,6 +309,31 @@ const Interesting = () => {
             </div>
           }
         </DialogComment>
+      )}
+
+      {openEditOrDeleteModal && (
+        <AlertDialogSlide
+          show={openEditOrDeleteModal}
+          handleClose={handleCloseAlert}
+        >
+          <div className="">
+            <p className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]">
+              Пожаловаться
+            </p>
+            
+            {user?.sid == employeId && (
+              <p
+                onClick={() => deleteComment(idxEditOrDelete)}
+                className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]"
+              >
+                Удалить
+              </p>
+            )}
+            <p className=" text-center text-[16px] cursor-pointer  p-[6px_0] w-[350px]" onClick={() => dispatch(setOpenEditOrDeleteModal(false))}>
+              Отмена
+            </p>
+          </div>
+        </AlertDialogSlide>
       )}
     </div>
   );
