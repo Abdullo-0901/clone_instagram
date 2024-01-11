@@ -55,7 +55,7 @@ const OpenLeftMessage = () => {
           openleftmessage ? "left-[65px]" : "left-[-65px]"
         } h-full`}
       >
-        <div className="flex justify-between p-[4px_10px] mb-8 items-center">
+        <div className="flex justify-between p-[4px_10px] items-center">
           <div className="flex items-center cursor-pointer">
             <h1 className="font-bold text-black ">{user?.userName}</h1>
             <KeyboardArrowDownIcon />
@@ -66,13 +66,6 @@ const OpenLeftMessage = () => {
         </div>
         <BasicTabs />
         <div className="relative w-full">
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            type="text"
-            className="w-full pr-8 bg-gray-100 outline-none p-[8px_15px] rounded-xl mt-9"
-            placeholder="Поиск"
-          />
           <span
             onClick={() => setValue("")}
             className="absolute top-10 right-2 cursor-pointer"
