@@ -34,7 +34,7 @@ export const navbar = [
     title: "Сообщения",
     id: 5,
     icons: <MessageIcon />,
-    path: "/messages",
+    path: "messages",
   },
   {
     title: "Уведомления",

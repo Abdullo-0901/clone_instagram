@@ -9,6 +9,7 @@ export interface CounterState {
   employeeId: string;
   deleteEmployeComment: number | string;
   openleft: boolean;
+  openleftmessage: boolean;
   openEditOrDeleteModal: boolean;
   idxEditOrDelete: string | number;
 }
@@ -22,6 +23,7 @@ const initialState: CounterState = {
   deleteEmployeComment: "",
   idxEditOrDelete: "",
   openleft: false,
+  openleftmessage: false,
   openEditOrDeleteModal: false,
 };
 export const slice = createSlice({
@@ -53,6 +55,9 @@ export const slice = createSlice({
     setopenLeft: (state, action: PayloadAction<boolean>) => {
       state.openleft = action.payload;
     },
+    setopenLeftMessage: (state, action: PayloadAction<boolean>) => {
+      state.openleftmessage = action.payload;
+    },
     setOpenEditOrDeleteModal: (state, action: PayloadAction<boolean>) => {
       state.openEditOrDeleteModal = action.payload;
     },
@@ -70,4 +75,5 @@ export const {
   setopenLeft,
   setOpenEditOrDeleteModal,
   setIdxEditOrDelete,
+  setopenLeftMessage,
 } = slice.actions;

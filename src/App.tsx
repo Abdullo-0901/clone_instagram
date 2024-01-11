@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/forgot-password";
 import UserProfile from "./pages/UserProfile";
 import Interesting from "./pages/interesting";
 import Reels from "./pages/reels";
+import Messages from "./pages/messages";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -69,16 +70,20 @@ const App = () => {
           ),
         },
         {
-          path:"user/:id",
-          element:<UserProfile/>
+          path: "user/:id",
+          element: <UserProfile />,
         },
         {
-          path:"intersting",
-          element:<Interesting/>
+          path: "intersting",
+          element: <Interesting />,
         },
         {
-          path:"reels",
-          element:<Reels/>
+          path: "reels",
+          element: <Reels />,
+        },
+        {
+          path: "messages",
+          element: <Messages />,
         },
       ],
     },

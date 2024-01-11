@@ -2,16 +2,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
-import OpenLeft from "../components/dialog/openleft";
+import OpenLeft from "../components/dialog/open-left-query";
 import { navbar } from "../components/navbar";
-import { setopenLeft } from "../store/storeSlice";
+import { setopenLeft, setopenLeftMessage } from "../store/storeSlice";
 import { destroyToken, isValidToken } from "../utils/token";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import OpenLeftMessage from "../components/dialog/open-left-message";
 const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const openleft = useSelector(({ modal }) => modal.openleft);
+  const openleftmessage = useSelector(({ modal }) => modal.openleftmessage);
   useEffect(() => {
     if (isValidToken()) {
       destroyToken();
@@ -23,10 +25,10 @@ const Layout = () => {
       <div className="min-w-[250px]  min-h-[100vh]  border-gray-300">
         <header className="fixed min-w-[280px] p-[5px_10px]   min-h-[100vh] border-l-2 border flex flex-col gap-y-2  top-0">
           <Link to={"/home"}>
-            {openleft ? (
+            {openleft | openleftmessage ? (
               <Link
                 onClick={() => dispatch(setopenLeft(false))}
-                to={`${openleft ? "" : "home"}`}
+                to={`${openleft | openleftmessage ? "" : "home"}`}
                 className={`flex  m-[35px_2px] hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_9px] gap-3  rounded-xl ${
                   openleft ? "w-[45px]" : "w-full"
                 }`}
@@ -42,17 +44,41 @@ const Layout = () => {
               <div key={ind}>
                 {el.title == "Поисковый запрос" ? (
                   <Link
-                    onClick={() =>
-                      dispatch(setopenLeft(openleft ? false : true))
-                    }
+                    onClick={() => {
+                      dispatch(setopenLeft(openleft ? false : true));
+                      dispatch(
+                        setopenLeftMessage(openleftmessage ? false : true),
+                      );
+                    }}
                     className={`flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl ${
-                      openleft ? "w-[45px]" : "w-full"
+                      openleft | openleftmessage ? "w-[45px]" : "w-full"
                     }`}
                     to={el.path}
                     key={el.id}
                   >
                     <span>{el.icons}</span>
-                    {openleft ? (
+                    {openleft | openleftmessage ? (
+                      <span className="hidden"> {el.title}</span>
+                    ) : (
+                      <span> {el.title}</span>
+                    )}
+                  </Link>
+                ) : el.title == "Сообщения" ? (
+                  <Link
+                    onClick={() => {
+                      dispatch(setopenLeft(openleft ? false : true));
+                      dispatch(
+                        setopenLeftMessage(openleftmessage ? false : true),
+                      );
+                    }}
+                    className={`flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl ${
+                      openleft | openleftmessage ? "w-[45px]" : "w-full"
+                    }`}
+                    to={el.path}
+                    key={el.id}
+                  >
+                    <span>{el.icons}</span>
+                    {openleft | openleftmessage ? (
                       <span className="hidden"> {el.title}</span>
                     ) : (
                       <span> {el.title}</span>
@@ -60,15 +86,18 @@ const Layout = () => {
                   </Link>
                 ) : (
                   <Link
-                    onClick={() => dispatch(setopenLeft(false))}
+                    onClick={() => {
+                      dispatch(setopenLeft(false));
+                      dispatch(setopenLeftMessage(false));
+                    }}
                     className={`flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl ${
-                      openleft ? "w-[45px]" : "w-full"
+                      openleft | openleftmessage ? "w-[45px]" : "w-full"
                     }`}
                     to={el.path}
                     key={el.id}
                   >
                     <span>{el.icons}</span>
-                    {openleft ? (
+                    {openleft | openleftmessage ? (
                       <span className="hidden"> {el.title}</span>
                     ) : (
                       <span> {el.title}</span>
@@ -96,6 +125,7 @@ const Layout = () => {
         </header>
 
         {openleft && <OpenLeft />}
+        {openleftmessage && <OpenLeftMessage />}
       </div>
       <Outlet />
     </div>
