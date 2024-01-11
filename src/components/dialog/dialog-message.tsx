@@ -11,9 +11,18 @@ export default function MessageDialog(props: FormDialogProps) {
   return (
     <React.Fragment>
       <Dialog
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "40%",
+              maxWidth: "1100px",
+              height: "80vh",
+              // Set your width here
+            },
+          },
+        }}
         open={props.show}
         onClose={props.handleClose}
-        style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
       >
         {props.children}
       </Dialog>

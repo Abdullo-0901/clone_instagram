@@ -2,20 +2,25 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
 import KeyboardCommandKeyIcon from "@mui/icons-material/KeyboardCommandKey";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { UserInfoInterface } from "../../interfaces";
 import { getUserByUserName } from "../../services/search";
-import { setopenLeft } from "../../store/storeSlice";
+import { setOpenEditOrDeleteModal, setopenLeft } from "../../store/storeSlice";
 import CircularIndeterminate from "../Progres";
 import BasicTabs from "../tabs";
 import { getToken } from "../../utils/token";
+import MessageDialog from "./dialog-message";
 
 const OpenLeftMessage = () => {
   const getByUserName = new getUserByUserName();
   const openleftmessage = useSelector(({ modal }) => modal.openleftmessage);
+  const openEditOrDeleteModal = useSelector(
+    ({ modal }) => modal.openEditOrDeleteModal,
+  );
   const [value, setValue] = useState<string>("");
   const dispatch = useDispatch();
   const values = value;
@@ -60,7 +65,10 @@ const OpenLeftMessage = () => {
             <h1 className="font-bold text-black ">{user?.userName}</h1>
             <KeyboardArrowDownIcon />
           </div>
-          <div className="cursor-pointer">
+          <div
+            className="cursor-pointer"
+            onClick={() => dispatch(setOpenEditOrDeleteModal(true))}
+          >
             <KeyboardCommandKeyIcon />
           </div>
         </div>
@@ -91,72 +99,142 @@ const OpenLeftMessage = () => {
             </h2>
           )}{" "}
         </div>
-        {users?.data.data.length == 0 || value == "" ? (
-          <div className="flex flex-col gap-6 ">
-            {usersStorage.map((us) => {
-              return (
-                <Link
-                  onClick={() => dispatch(setopenLeft(false))}
-                  className=""
-                  to={`user/${us.id}`}
-                >
-                  <div className="flex gap-6 items-center justify-between">
-                    <div className="flex gap-6 items-center justify-between">
-                      <Avatar
-                        sx={{ width: 46, height: 46 }}
-                        src={`${import.meta.env.VITE_APP_FILES_URL}${
-                          us.avatar
-                        }`}
-                      />
-                      <div className="flex flex-col justify-between">
-                        <h1 className="font-semibold text-black">
-                          {us.userName}
-                        </h1>
-                        <h1 className="text-gray-300">{us.fullName}</h1>
-                      </div>
-                    </div>
-                    <div onClick={() => removeUser(us.id)}>
-                      <ClearIcon className="" />{" "}
-                    </div>
-                  </div>{" "}
-                </Link>
-              );
-            })}
-            <div className="h-full w-full flex justify-center items-center">
-              <h1 className="text-gray-200">Нет недавних запросов.</h1>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6 ">
-            {users?.data.data.map((user) => {
-              return (
-                <Link
-                  onClick={() => {
-                    handleClick(user), dispatch(setopenLeft(false));
-                  }}
-                  className=""
-                  to={`user/${user.id}`}
-                >
-                  <div className="flex gap-6 items-center">
-                    <Avatar
-                      sx={{ width: 46, height: 46 }}
-                      src={`${import.meta.env.VITE_APP_FILES_URL}${
-                        user.avatar
-                      }`}
-                    />
-                    <div className="flex flex-col justify-between">
-                      <h1 className="font-semibold text-black">
-                        {user.userName}
-                      </h1>
-                      <h1 className="text-gray-300">{user.fullName}</h1>
-                    </div>
-                  </div>{" "}
-                </Link>
-              );
-            })}
-          </div>
-        )}
       </div>
+      {openEditOrDeleteModal && (
+        <MessageDialog
+          show={openEditOrDeleteModal}
+          handleClose={() =>
+            dispatch(
+              setOpenEditOrDeleteModal(openEditOrDeleteModal ? false : true),
+            )
+          }
+        >
+          <div className="p-[10px_15px]">
+            <div className="wrapper-text flex justify-between items-center  p-[15px]">
+              <p className="text-[16px] font-[700] mx-auto text-center">
+                Новое сообщение
+              </p>
+              <button onClick={() => dispatch(setOpenEditOrDeleteModal(false))}>
+                <CloseIcon
+                  className="to-active cursor-pointer"
+                  sx={{ fontSize: "28px" }}
+                />
+              </button>
+            </div>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+              className="flex flex-col justify-between"
+            >
+              <div className="wrapper-input flex items-end gap-[20px] py-[7px] px-[20px] border-t border-b mb-3">
+                <label className="font-[500]">Кому:</label>
+                <div
+                  className={`${
+                    value == "" ? "hidden" : "flex"
+                  } items-end gap-[10px] bg-[#e0f1ff]  rounded-[12px] px-[12px] py-[3px] font-[600] cursor-pointer`}
+                >
+                  <p className="text-[14px] text-[#0095F6] hover:text-[#1d4a68]">
+                    {value}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(setOpenEditOrDeleteModal(false))}
+                  >
+                    <CloseIcon
+                      className="to-active cursor-pointer"
+                      sx={{ fontSize: "18px", color: "#0095F6" }}
+                    />
+                  </button>
+                </div>
+                <input
+                  onChange={(event) => setValue(event.target.value)}
+                  value={value}
+                  type="text"
+                  placeholder="Поиск..."
+                  className="text-[14px] outline-none w-[100%]"
+                />
+              </div>
+
+              <div className="wrapper-search overflow-auto h-[50vh]">
+                {users?.data.data.length == 0 || value == "" ? (
+                  <div className="flex flex-col gap-6 ">
+                    {usersStorage.map((us) => {
+                      return (
+                        <Link
+                          onClick={() => dispatch(setopenLeft(false))}
+                          className=""
+                          to={`user/${us.id}`}
+                        >
+                          <div className="flex gap-6 items-center justify-between">
+                            <div className="flex gap-6 items-center justify-between">
+                              <Avatar
+                                sx={{ width: 46, height: 46 }}
+                                src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                  us.avatar
+                                }`}
+                              />
+                              <div className="flex flex-col justify-between">
+                                <h1 className="font-semibold text-black">
+                                  {us.userName}
+                                </h1>
+                                <h1 className="text-gray-300">{us.fullName}</h1>
+                              </div>
+                            </div>
+                            <div onClick={() => removeUser(us.id)}>
+                              <ClearIcon className="" />{" "}
+                            </div>
+                          </div>{" "}
+                        </Link>
+                      );
+                    })}
+                    <div className="h-full w-full flex justify-center items-center">
+                      <h1 className="text-gray-200">Нет недавних запросов.</h1>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-6 ">
+                    {users?.data.data.map((user) => {
+                      return (
+                        <Link
+                          onClick={() => {
+                            handleClick(user), dispatch(setopenLeft(false));
+                          }}
+                          className=""
+                          to={`user/${user.id}`}
+                        >
+                          <div className="flex gap-6 items-center">
+                            <Avatar
+                              sx={{ width: 46, height: 46 }}
+                              src={`${import.meta.env.VITE_APP_FILES_URL}${
+                                user.avatar
+                              }`}
+                            />
+                            <div className="flex flex-col justify-between">
+                              <h1 className="font-semibold text-black">
+                                {user.userName}
+                              </h1>
+                              <h1 className="text-gray-300">{user.fullName}</h1>
+                            </div>
+                          </div>{" "}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  className="h-[44px]  flex justify-center items-center text-center mx-auto w-[94%] bg-[#0095f6] text-[#fff] text-[14px] font-[600] rounded-[8px]"
+                >
+                  Чат
+                </button>
+              </div>
+            </form>
+          </div>
+        </MessageDialog>
+      )}
     </div>
   );
 };
