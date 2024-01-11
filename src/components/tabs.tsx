@@ -46,15 +46,42 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "black" }}>
         <Tabs
           value={value}
           onChange={handleChange}
+          textColor="inherit"
           aria-label="basic tabs example"
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: "black",
+            },
+          }}
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab
+            label={
+              <span className={"text-black uppercase"}>
+                P<span className={"text-black lowercase"}>rimary</span>
+              </span>
+            }
+            {...a11yProps(0)}
+          />
+          <Tab
+            label={
+              <span className={"text-black uppercase"}>
+                G<span className={"text-black lowercase"}>eneral</span>
+              </span>
+            }
+            {...a11yProps(1)}
+          />
+          <Tab
+            label={
+              <span className={"text-black uppercase"}>
+                R<span className={"text-black lowercase"}>equest</span>
+              </span>
+            }
+            {...a11yProps(2)}
+          />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

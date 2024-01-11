@@ -46,9 +46,7 @@ const Layout = () => {
                   <Link
                     onClick={() => {
                       dispatch(setopenLeft(openleft ? false : true));
-                      dispatch(
-                        setopenLeftMessage(openleftmessage ? false : true),
-                      );
+                      dispatch(setopenLeftMessage(false));
                     }}
                     className={`flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl ${
                       openleft | openleftmessage ? "w-[45px]" : "w-full"
@@ -66,7 +64,7 @@ const Layout = () => {
                 ) : el.title == "Сообщения" ? (
                   <Link
                     onClick={() => {
-                      dispatch(setopenLeft(openleft ? false : true));
+                      dispatch(setopenLeft(false));
                       dispatch(
                         setopenLeftMessage(openleftmessage ? false : true),
                       );

@@ -1,5 +1,7 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
+import KeyboardCommandKeyIcon from "@mui/icons-material/KeyboardCommandKey";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +10,8 @@ import { UserInfoInterface } from "../../interfaces";
 import { getUserByUserName } from "../../services/search";
 import { setopenLeft } from "../../store/storeSlice";
 import CircularIndeterminate from "../Progres";
+import BasicTabs from "../tabs";
+import { getToken } from "../../utils/token";
 
 const OpenLeftMessage = () => {
   const getByUserName = new getUserByUserName();
@@ -15,6 +19,7 @@ const OpenLeftMessage = () => {
   const [value, setValue] = useState<string>("");
   const dispatch = useDispatch();
   const values = value;
+  const user = getToken();
   const {
     data: users,
     isLoading,
@@ -46,11 +51,20 @@ const OpenLeftMessage = () => {
   return (
     <div className="absolute  min-h-full  ">
       <div
-        className={`fixed w-[350px] p-[15px_10px] bg-white border-l border-r rounded-[0_10px_10px_0] border-gray-200 ${
+        className={`fixed w-[350px] p-[15px_14px] bg-white border-l border-r rounded-[0_10px_10px_0] border-gray-200 ${
           openleftmessage ? "left-[65px]" : "left-[-65px]"
         } h-full`}
       >
-        {/* <BasicTabs /> */}
+        <div className="flex justify-between p-[4px_10px] mb-8 items-center">
+          <div className="flex items-center cursor-pointer">
+            <h1 className="font-bold text-black ">{user?.userName}</h1>
+            <KeyboardArrowDownIcon />
+          </div>
+          <div className="cursor-pointer">
+            <KeyboardCommandKeyIcon />
+          </div>
+        </div>
+        <BasicTabs />
         <div className="relative w-full">
           <input
             value={value}
