@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Layout, Profile } from "./routes/routes";
 
-import Loading from "./components/loading";
+import Loading from "./components/search/loading";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import SearchQuery from "./pages/search-query";

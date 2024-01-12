@@ -121,68 +121,34 @@ const OpenLeftMessage = () => {
               </div>
 
               <div className="wrapper-search overflow-auto h-[50vh]">
-                {users?.data.data.length == 0 || value == "" ? (
-                  <div className="flex flex-col gap-6 ">
-                    {usersStorage.map((us) => {
-                      return (
-                        <Link
-                          onClick={() => dispatch(setopenLeft(false))}
-                          className=""
-                          to={`user/${us.id}`}
-                        >
-                          <div className="flex gap-6 items-center justify-between">
-                            <div className="flex gap-6 items-center justify-between">
-                              <Avatar
-                                sx={{ width: 46, height: 46 }}
-                                src={`${import.meta.env.VITE_APP_FILES_URL}${
-                                  us.avatar
-                                }`}
-                              />
-                              <div className="flex flex-col justify-between">
-                                <h1 className="font-semibold text-black">
-                                  {us.userName}
-                                </h1>
-                                <h1 className="text-gray-300">{us.fullName}</h1>
-                              </div>
-                            </div>
-                          </div>{" "}
-                        </Link>
-                      );
-                    })}
-                    <div className="h-full w-full flex justify-center items-center">
-                      <h1 className="text-gray-200">Нет недавних запросов.</h1>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-6 ">
-                    {users?.data.data.map((user) => {
-                      return (
-                        <Link
-                          onClick={() => {
-                            handleClick(user), dispatch(setopenLeft(false));
-                          }}
-                          className=""
-                          to={`user/${user.id}`}
-                        >
-                          <div className="flex gap-6 items-center">
-                            <Avatar
-                              sx={{ width: 46, height: 46 }}
-                              src={`${import.meta.env.VITE_APP_FILES_URL}${
-                                user.avatar
-                              }`}
-                            />
-                            <div className="flex flex-col justify-between">
-                              <h1 className="font-semibold text-black">
-                                {user.userName}
-                              </h1>
-                              <h1 className="text-gray-300">{user.fullName}</h1>
-                            </div>
-                          </div>{" "}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
+                <div className="flex flex-col gap-6 ">
+                  {users?.data.data.map((user) => {
+                    return (
+                      <Link
+                        onClick={() => {
+                          handleClick(user), dispatch(setopenLeft(false));
+                        }}
+                        className=""
+                        to={`user/${user.id}`}
+                      >
+                        <div className="flex gap-6 items-center">
+                          <Avatar
+                            sx={{ width: 46, height: 46 }}
+                            src={`${import.meta.env.VITE_APP_FILES_URL}${
+                              user.avatar
+                            }`}
+                          />
+                          <div className="flex flex-col justify-between">
+                            <h1 className="font-semibold text-black">
+                              {user.userName}
+                            </h1>
+                            <h1 className="text-gray-300">{user.fullName}</h1>
+                          </div>
+                        </div>{" "}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
               <div className="mt-6">
                 <button

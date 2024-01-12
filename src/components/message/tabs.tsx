@@ -4,8 +4,9 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { UserInfoInterface } from "../../interfaces";
+import { setOpenMessageUser } from "../../store/storeSlice";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -44,7 +45,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs(usersStorage: TabPropsChild) {
   const [value, setValue] = React.useState(0);
-  console.log(usersStorage);
+  const dispatch = useDispatch();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -94,12 +95,12 @@ export default function BasicTabs(usersStorage: TabPropsChild) {
         <div className="flex flex-col gap-6 ">
           {usersStorage.child.map((user) => {
             return (
-              <Link
+              <div
                 onClick={() => {
+                  dispatch(setOpenMessageUser(false));
                   // handleClick(user);
                 }}
-                className=""
-                to={`user/${user.id}`}
+                className="cursor-pointer"
               >
                 <div className="flex gap-6 items-center">
                   <Avatar
@@ -113,7 +114,7 @@ export default function BasicTabs(usersStorage: TabPropsChild) {
                     <h1 className="text-gray-300">{user.fullName}</h1>
                   </div>
                 </div>{" "}
-              </Link>
+              </div>
             );
           })}
         </div>

@@ -4,7 +4,11 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
 import OpenLeft from "../components/search/open-left-query";
 import { navbar } from "../components/navbar";
-import { setopenLeft, setopenLeftMessage } from "../store/storeSlice";
+import {
+  setOpenMessageUser,
+  setopenLeft,
+  setopenLeftMessage,
+} from "../store/storeSlice";
 import { destroyToken, isValidToken } from "../utils/token";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import OpenLeftMessage from "../components/message/open-left-message";
@@ -65,9 +69,8 @@ const Layout = () => {
                   <Link
                     onClick={() => {
                       dispatch(setopenLeft(false));
-                      dispatch(
-                        setopenLeftMessage(openleftmessage ? false : true),
-                      );
+                      dispatch(setopenLeftMessage(true));
+                      dispatch(setOpenMessageUser(true));
                     }}
                     className={`flex  hover:bg-gray-200 transition hover:scale-105 duration-500 ease-in-out p-[10px_11px] gap-3  rounded-xl ${
                       openleft | openleftmessage ? "w-[45px]" : "w-full"
