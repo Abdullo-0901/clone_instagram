@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoText from "../assets/logo-text.png";
-import OpenLeft from "../components/dialog/open-left-query";
+import OpenLeft from "../components/search/open-left-query";
 import { navbar } from "../components/navbar";
 import { setopenLeft, setopenLeftMessage } from "../store/storeSlice";
 import { destroyToken, isValidToken } from "../utils/token";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import OpenLeftMessage from "../components/dialog/open-left-message";
+import OpenLeftMessage from "../components/message/open-left-message";
 const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

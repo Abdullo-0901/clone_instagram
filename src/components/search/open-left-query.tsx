@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserByUserName } from "../../services/search";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import CircularIndeterminate from "../Progres";
+import CircularIndeterminate from "./Progres";
 import { UserInfoInterface } from "../../interfaces";
 import { setopenLeft } from "../../store/storeSlice";
 
