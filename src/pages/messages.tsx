@@ -3,9 +3,60 @@ import { setOpenEditOrDeleteModal } from "../store/storeSlice";
 import Avatar from "@mui/material/Avatar";
 import CallIcon from "@mui/icons-material/Call";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import { useState } from "react";
 const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
+  const messageUser = useSelector(({ modal }) => modal.employeeId);
+  const [modalSmile, setModalSmile] = useState(false);
   const dispatch = useDispatch();
+  const { data: userInfo } = UseGetUserProfileById(messageUser);
+
+  const smiles = [
+    "😂",
+    "😮",
+    "😍",
+    "😢",
+    "👏",
+    "🔥",
+    "🎉",
+    "💯",
+    "❤️",
+    "🤣",
+    "🥰",
+    "😘",
+    "😭",
+    "😊",
+  ];
+  const smilesSecond = [
+    "😀",
+    "😃",
+    "😄",
+    "😁",
+    "😆",
+    "😅",
+    "🤣",
+    "😂",
+    "🙂",
+    "🙃",
+    "😉",
+    "😊",
+    "😇",
+    "🥰",
+    "😍",
+    "🤩",
+    "😘",
+    "😗",
+    "😚",
+    "😙",
+    "😋",
+    "😛",
+    "😜",
+  ];
 
   return (
     <div className="w-[1400px]   p-[10px] ml-[165px] ">
@@ -32,61 +83,116 @@ const Messages = () => {
           </button>
         </div>
       ) : (
-        <div className="flex  w-full  justify-between items-center p-[10px] border-b-[1px]">
-          <div className="user flex items-center gap-[15px] cursor-pointer w-[30%]">
-            <Avatar
-              sx={{ width: 46, height: 46 }}
-              src={`${import.meta.env.VITE_APP_FILES_URL}`}
-            />
-            <div className="wrapper-text">
-              <p className="text-[14px]">zuhurov samariddin</p>
-              <p className="text-[12px] text-[#737373]">В сети</p>
+        <div className="flex flex-col">
+          <div className="flex  w-full  justify-between items-center p-[10px] border-b-[1px]">
+            <div className="user flex items-center gap-[15px] cursor-pointer w-[30%]">
+              <Avatar
+                sx={{ width: 46, height: 46 }}
+                src={`${import.meta.env.VITE_APP_FILES_URL}${userInfo?.data
+                  .image}`}
+              />
+              <div className="wrapper-text">
+                <p className="text-[14px]">{userInfo?.data.fullName}</p>
+                <p className="text-[12px] text-[#737373]">В сети</p>
+              </div>
+            </div>
+            <div className="wrapper-icons flex items-center gap-[18px]">
+              <CallIcon />
+              <VideoCameraFrontIcon />
+              <button>
+                <svg
+                  className="x1lliihq x1n2onr6 x5n08af css-1m9ymud-MuiSvgIcon-root"
+                  focusable="false"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  data-testid="undefinedIcon"
+                  aria-label="\u0418\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u043F\u0435\u0440\u0435\u043F\u0438\u0441\u043A\u0435"
+                  fill="currentColor"
+                  height="24"
+                  width="24"
+                >
+                  <circle
+                    cx="12.001"
+                    cy="12.005"
+                    fill="none"
+                    r="10.5"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></circle>
+                  <circle cx="11.819" cy="7.709" r="1.25"></circle>
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.569 16.777L13.432 16.777"
+                  ></path>
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.569 11.05L12 11.05 12 16.777"
+                  ></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div className="wrapper-icons flex items-center gap-[18px]">
-            <CallIcon />
-            <VideoCameraFrontIcon />
-            <button>
-              <svg
-                className="x1lliihq x1n2onr6 x5n08af css-1m9ymud-MuiSvgIcon-root"
-                focusable="false"
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                data-testid="undefinedIcon"
-                aria-label="\u0418\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u043F\u0435\u0440\u0435\u043F\u0438\u0441\u043A\u0435"
-                fill="currentColor"
-                height="24"
-                width="24"
+          <div className=" fixed w-[80%] z-50 bottom-0">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+              className={`${"w-[77%]"} bg-[#fff] p-[20px]`}
+            >
+              <div className="wrapper-input flex justify-between px-[15px] items-center border-[1px] w-full rounded-[50px]">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setModalSmile(modalSmile ? false : true)}
+                >
+                  <SentimentSatisfiedAltIcon />
+                </div>
+                <input
+                  type="text"
+                  className=" p-[10px] outline-none w-full"
+                  placeholder="Напишите сообщение..."
+                />
+                <div className="input-icons flex items-center gap-[20px]">
+                  <button
+                    type="submit"
+                    className={`text-[14px] font-[600] text-[#0095f6] hover:text-[#19405a] transition-all duration-100`}
+                  >
+                    Отправить
+                  </button>
+                  <KeyboardVoiceIcon />
+                  <ImageSearchIcon />
+                  <FavoriteIcon />
+                </div>
+              </div>
+              {/* Modal Smile ============== */}
+              <div
+                className={`${
+                  modalSmile ? "flex" : "hidden"
+                } modal bg-[#fff] flex-col rounded-[10px] border-[1px] overflow-auto h-[60vh] w-[40%] shadow-lg absolute bottom-[90%] p-[15px]`}
               >
-                <circle
-                  cx="12.001"
-                  cy="12.005"
-                  fill="none"
-                  r="10.5"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                ></circle>
-                <circle cx="11.819" cy="7.709" r="1.25"></circle>
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10.569 16.777L13.432 16.777"
-                ></path>
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10.569 11.05L12 11.05 12 16.777"
-                ></path>
-              </svg>
-            </button>
+                <p>Самые популярные</p>
+                <div className="wrapper-smile flex flex-wrap py-[10px]">
+                  {smiles.map((e) => {
+                    return <p className="text-[35px] cursor-pointer">{e}</p>;
+                  })}
+                </div>
+                <p>Смайлики и люди</p>
+                <div className="wrapper-smile-people flex flex-wrap">
+                  {smilesSecond.map((e) => {
+                    return <p className="text-[35px] cursor-pointer">{e}</p>;
+                  })}
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       )}

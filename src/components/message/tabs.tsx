@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { UserInfoInterface } from "../../interfaces";
-import { setOpenMessageUser } from "../../store/storeSlice";
+import { setEmployeeId, setOpenMessageUser } from "../../store/storeSlice";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -93,12 +93,13 @@ export default function BasicTabs(usersStorage: TabPropsChild) {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <div className="flex flex-col gap-6 ">
-          {usersStorage.child.map((user) => {
+          {usersStorage.child.map((user, id) => {
             return (
               <div
+                key={id}
                 onClick={() => {
                   dispatch(setOpenMessageUser(false));
-                  // handleClick(user);
+                  dispatch(setEmployeeId(user.id));
                 }}
                 className="cursor-pointer"
               >
