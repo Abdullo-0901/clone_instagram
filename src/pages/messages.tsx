@@ -13,6 +13,9 @@ const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
   const messageUser = useSelector(({ modal }) => modal.employeeId);
   const [modalSmile, setModalSmile] = useState(false);
+  const [smile, setSmile] = useState<"">();
+  console.log(smile);
+
   const dispatch = useDispatch();
   const { data: userInfo } = UseGetUserProfileById(messageUser);
 
@@ -157,7 +160,9 @@ const Messages = () => {
                   <SentimentSatisfiedAltIcon />
                 </div>
                 <input
+                  value={smile}
                   type="text"
+                  onChange={(e) => setSmile(e.target.value)}
                   className=" p-[10px] outline-none w-full"
                   placeholder="Напишите сообщение..."
                 />
@@ -182,7 +187,14 @@ const Messages = () => {
                 <p>Самые популярные</p>
                 <div className="wrapper-smile flex flex-wrap py-[10px]">
                   {smiles.map((e) => {
-                    return <p className="text-[35px] cursor-pointer">{e}</p>;
+                    return (
+                      <p
+                        className="text-[35px] cursor-pointer"
+                        onClick={() => setSmile((prev) => prev + e)}
+                      >
+                        {e}
+                      </p>
+                    );
                   })}
                 </div>
                 <p>Смайлики и люди</p>
