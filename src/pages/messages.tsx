@@ -13,7 +13,7 @@ const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
   const messageUser = useSelector(({ modal }) => modal.employeeId);
   const [modalSmile, setModalSmile] = useState(false);
-  const [smile, setSmile] = useState<"">();
+  const [smile, setSmile] = useState<string>("");
   console.log(smile);
 
   const dispatch = useDispatch();
@@ -200,7 +200,14 @@ const Messages = () => {
                 <p>Смайлики и люди</p>
                 <div className="wrapper-smile-people flex flex-wrap">
                   {smilesSecond.map((e) => {
-                    return <p className="text-[35px] cursor-pointer">{e}</p>;
+                    return (
+                      <p
+                        onClick={() => setSmile((prev) => prev + e)}
+                        className="text-[35px] cursor-pointer"
+                      >
+                        {e}
+                      </p>
+                    );
                   })}
                 </div>
               </div>
