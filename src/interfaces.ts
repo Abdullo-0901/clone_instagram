@@ -1,4 +1,3 @@
-
 interface EnumComentsItems {
   comment: string;
   dateCommented: string;
@@ -108,4 +107,11 @@ export interface likeId {
 export interface PropsComment {
   comment: string;
   postId: number;
+}
+
+// Chat send message
+
+export interface ChatMessage {
+  chatId: number;
+  messageText: string;
 }
