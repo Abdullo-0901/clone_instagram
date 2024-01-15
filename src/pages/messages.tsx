@@ -1,20 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setOpenEditOrDeleteModal } from "../store/storeSlice";
-import Avatar from "@mui/material/Avatar";
 import CallIcon from "@mui/icons-material/Call";
-import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
-import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import { setOpenEditOrDeleteModal } from "../store/storeSlice";
 const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
   const messageUser = useSelector(({ modal }) => modal.employeeId);
   const [modalSmile, setModalSmile] = useState(false);
   const [smile, setSmile] = useState<string>("");
-  console.log(smile);
 
   const dispatch = useDispatch();
   const { data: userInfo } = UseGetUserProfileById(messageUser);

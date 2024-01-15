@@ -3,7 +3,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardCommandKeyIcon from "@mui/icons-material/KeyboardCommandKey";
 import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { UserInfoInterface } from "../../interfaces";
@@ -12,9 +12,11 @@ import { setOpenEditOrDeleteModal, setopenLeft } from "../../store/storeSlice";
 import { getToken } from "../../utils/token";
 import BasicTabs from "./tabs";
 import MessageDialog from "../dialog/dialog-message";
+import { chatService } from "../../services/Chat/chat.service";
 
 const OpenLeftMessage = () => {
   const getByUserName = new getUserByUserName();
+  const chatServices = new chatService();
   const openleftmessage = useSelector(({ modal }) => modal.openleftmessage);
   const openEditOrDeleteModal = useSelector(
     ({ modal }) => modal.openEditOrDeleteModal,
@@ -29,6 +31,11 @@ const OpenLeftMessage = () => {
     {
       enabled: !!values,
     },
+  );
+
+  const { mutate: createChat } = useMutation(
+    ["createChat"],
+    (receiverUserId: string) => chatServices.createChat(receiverUserId),
   );
 
   const usersStorage: UserInfoInterface[] =
@@ -126,7 +133,9 @@ const OpenLeftMessage = () => {
                     return (
                       <Link
                         onClick={() => {
-                          handleClick(user), dispatch(setopenLeft(false));
+                          handleClick(user),
+                            dispatch(setopenLeft(false)),
+                            createChat(user.id);
                         }}
                         className=""
                         to={`user/${user.id}`}
