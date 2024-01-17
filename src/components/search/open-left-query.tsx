@@ -92,6 +92,7 @@ const OpenLeft = () => {
                   onClick={() => dispatch(setopenLeft(false))}
                   className=""
                   to={`user/${us.id}`}
+                  key={us.id}
                 >
                   <div className="flex gap-6 items-center justify-between">
                     <div className="flex gap-6 items-center justify-between">

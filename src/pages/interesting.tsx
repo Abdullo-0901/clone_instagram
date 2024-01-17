@@ -1,30 +1,29 @@
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
+import { useMutation } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
+import comment from "../assets/comment.png";
+import like from "../assets/like.png";
+import send from "../assets/send.png";
 import {
   UseGetPost,
   useGetPostById,
 } from "../components/customersHook/post/useGetPosts";
-import { useDispatch, useSelector } from "react-redux";
+import { UseGetUser } from "../components/customersHook/useGetUser";
+import AlertDialogSlide from "../components/dialog/dialog-delete";
+import DialogComment from "../components/dialog/dialogComment";
+import { getPostsService } from "../services/Post/post-service";
 import {
   openModal,
   setEmpoleeDeleteId,
   setIdx,
   setIdxEditOrDelete,
   setOpenEditOrDeleteModal,
-
 } from "../store/storeSlice";
-import DialogComment from "../components/dialog/dialogComment";
-import { UseGetUser } from "../components/customersHook/useGetUser";
-import Avatar from "@mui/material/Avatar";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import like from "../assets/like.png";
-import comment from "../assets/comment.png";
-import send from "../assets/send.png";
-import AlertDialogSlide from "../components/dialog/dialog-delete";
 import { getToken } from "../utils/token";
-import { useMutation } from "react-query";
-import { getPostsService } from "../services/Post/post-service";
 type BoxState = {
   open: boolean;
   postId: number | string;
@@ -33,11 +32,9 @@ const Interesting = () => {
   const [boxStates, setBoxStates] = useState<BoxState[]>([]);
   const openAddModal = useSelector(({ modal }) => modal.openAddModal);
   const idxEditOrDelete = useSelector(({ modal }) => modal.idxEditOrDelete);
-  const employeId = useSelector(({ modal }) => modal.employeeId);
-  const openEditOrDeleteModal = useSelector( ({ modal }) => modal.openEditOrDeleteModal);
-
-  console.log(idxEditOrDelete);
-  
+  const openEditOrDeleteModal = useSelector(
+    ({ modal }) => modal.openEditOrDeleteModal,
+  );
 
   const idx = useSelector(({ modal }) => modal.idx);
   const { data } = UseGetPost();
@@ -47,13 +44,12 @@ const Interesting = () => {
   const user = getToken();
 
   const postService = new getPostsService();
-  const { mutate: deleteComment ,} = useMutation(
+  const { mutate: deleteComment } = useMutation(
     ["delete"],
     (id: number) => postService.deletePost(id),
     {
       async onSuccess() {
         setOpenEditOrDeleteModal(false);
-
       },
     },
   );
@@ -80,17 +76,14 @@ const Interesting = () => {
   const handleCloseAlert = () => {
     dispatch(setOpenEditOrDeleteModal(false));
   };
-  console.log(user?.sid == employeId);
-  console.log(user?.sid);
-  console.log(employeId);
-  
-  
+
   return (
     <div className="w-[1400px] m-[35px_auto] p-[10px] pl-[100px] flex">
       <div className="grid grid-cols-3">
         {data?.data.map((stor, ind) => {
           return (
             <div
+              key={ind}
               className={`border  relative cursor-pointer ${
                 ind % 10 === 2 || ind % 10 == 5
                   ? "row-span-2"
@@ -135,16 +128,20 @@ const Interesting = () => {
             <div className="grid grid-cols-5 ">
               <div className="col-span-2  flex items-center h-[80vh]">
                 <div className=" flex items-center">
-                  {
-                    postById?.data?.images[0].slice(-3) == "MP4" ? <video  src={`${import.meta.env.VITE_APP_FILES_URL}${postById?.data
-                      ?.images[0]}`}  controls/>:
-                  <img
-                    className=""
-                    src={`${import.meta.env.VITE_APP_FILES_URL}${postById?.data
-                      ?.images[0]}`}
-                    alt=""
-                  />
-                  }
+                  {postById?.data?.images[0].slice(-3) == "MP4" ? (
+                    <video
+                      src={`${import.meta.env.VITE_APP_FILES_URL}${postById
+                        ?.data?.images[0]}`}
+                      controls
+                    />
+                  ) : (
+                    <img
+                      className=""
+                      src={`${import.meta.env.VITE_APP_FILES_URL}${postById
+                        ?.data?.images[0]}`}
+                      alt=""
+                    />
+                  )}
                 </div>
               </div>
               <div className="col-span-3">
@@ -207,7 +204,7 @@ const Interesting = () => {
                         );
                       })}
                   </div>
-                  {postById?.data?.comments.map((com, id) => {  
+                  {postById?.data?.comments.map((com, id) => {
                     return (
                       <div key={id}>
                         {users?.data.map((user, ind) => {
@@ -244,9 +241,7 @@ const Interesting = () => {
                                               setIdxEditOrDelete(user.id),
                                             );
                                             dispatch(
-                                              setEmpoleeDeleteId(
-                                                com.userId
-                                              ),
+                                              setEmpoleeDeleteId(com.userId),
                                             );
                                             dispatch(
                                               setOpenEditOrDeleteModal(true),
@@ -327,7 +322,7 @@ const Interesting = () => {
             <p className=" text-center border-b-2 border-gray-200 text-[18px]  font-[500] cursor-pointer  p-[6px_0] text-[#ef5e6a] w-[350px]">
               Пожаловаться
             </p>
-            
+
             {user?.sid == idxEditOrDelete && (
               <p
                 onClick={() => deleteComment(idxEditOrDelete)}
@@ -336,7 +331,10 @@ const Interesting = () => {
                 Удалить
               </p>
             )}
-            <p className=" text-center text-[16px] cursor-pointer  p-[6px_0] w-[350px]" onClick={() => dispatch(setOpenEditOrDeleteModal(false))}>
+            <p
+              className=" text-center text-[16px] cursor-pointer  p-[6px_0] w-[350px]"
+              onClick={() => dispatch(setOpenEditOrDeleteModal(false))}
+            >
               Отмена
             </p>
           </div>

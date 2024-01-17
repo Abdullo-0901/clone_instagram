@@ -6,17 +6,46 @@ import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import "../App.css";
+import {
+  useGetChats,
+  useGetMessageById,
+} from "../components/customersHook/chat-query-hooks/useChat";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import { ChatMessage } from "../interfaces";
+import { chatService } from "../services/Chat/chat.service";
 import { setOpenEditOrDeleteModal } from "../store/storeSlice";
+import { getToken } from "../utils/token";
+
 const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
-  const messageUser = useSelector(({ modal }) => modal.employeeId);
+  const messageUserId = useSelector(({ modal }) => modal.employeeId);
+  const refetchMessage = useSelector(({ modal }) => modal.refetchMessage);
   const [modalSmile, setModalSmile] = useState(false);
   const [smile, setSmile] = useState<string>("");
-
   const dispatch = useDispatch();
-  const { data: userInfo } = UseGetUserProfileById(messageUser);
+  const chatServices = new chatService();
+  const { data: getChats, isSuccess } = useGetChats();
+  const { data: userInfo } = UseGetUserProfileById(messageUserId);
+
+  const { mutate: sendMessage } = useMutation(
+    ["sendMessage"],
+    (data: ChatMessage) => chatServices.sendMessage(data),
+    {
+      async onSuccess() {
+        await refetch();
+      },
+    },
+  );
+
+  const chatId = getChats?.data.find(
+    (chat) => chat.receiveUser.userId === messageUserId,
+  );
+
+  const { data: message, refetch } = useGetMessageById(chatId?.chatId);
+  const result = message?.data.reverse();
 
   const smiles = [
     "😂",
@@ -34,6 +63,7 @@ const Messages = () => {
     "😭",
     "😊",
   ];
+
   const smilesSecond = [
     "😀",
     "😃",
@@ -59,6 +89,9 @@ const Messages = () => {
     "😛",
     "😜",
   ];
+
+  const userId = getToken();
+  refetchMessage && refetch();
 
   return (
     <div className="w-[1400px]   p-[10px] ml-[165px] ">
@@ -144,10 +177,78 @@ const Messages = () => {
               </button>
             </div>
           </div>
-          <div className=" fixed w-[80%] z-50 bottom-0">
+
+          {/* <div>
+              {message?.data
+                .filter((mes) => mes.userId != userId?.sid)
+                .map((mess) => {
+                  return (
+                    <div
+                      className="my-2 p-[7px_12px] rounded-[10px_4px_18px_10px] bg-[#3795f0] text-white"
+                      key={mess.messageText}
+                    >
+                      <p>{mess.messageText}</p>
+                    </div>
+                  );
+                })}
+            </div> */}
+          <div className="wrapper-message flex-col-reverse gap-[20px]">
+            {result?.map((mess) => {
+              return (
+                <>
+                  <div
+                    key={mess.messageId}
+                    className={`message-user flex w-full items-center gap-[10px] ${
+                      userId?.sid !== mess.userId
+                        ? "justify-start"
+                        : "justify-end"
+                    }`}
+                  >
+                    {/* <div
+                      // panelMessage === e.messageId ? "flex" : "hidden"
+                      className={`
+                     modal-panel-message bg-[#000] gap-[20px]   text-[#fff] p-[5px] px-[10px] rounded-[5px]`}
+                    ></div> */}
+                    <div
+                      onClick={() => {}}
+                      className={`${
+                        userId?.sid !== mess.userId
+                          ? "hidden"
+                          : "block panel-hidden"
+                      } panel-message relative`}
+                    >
+                      <p>...</p>
+                    </div>
+                    <Avatar
+                      src={mess.userPhoto}
+                      sx={{
+                        display: userId?.sid !== mess.userId ? "flex" : "none",
+                      }}
+                    />
+                    <p
+                      className={`${
+                        userId?.sid !== mess.userId
+                          ? "bg-[#00000010]"
+                          : "bg-[#3797f0] text-[#fff]"
+                      } bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px] my-2`}
+                    >
+                      {mess.messageText}
+                    </p>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+
+          <div className=" fixed w-[94%] z-50 bottom-0">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
+                sendMessage({
+                  chatId: chatId?.chatId,
+                  messageText: smile,
+                });
+                isSuccess ? (refetch(), setSmile("")) : alert("hello");
               }}
               className={`${"w-[77%]"} bg-[#fff] p-[20px]`}
             >
@@ -188,6 +289,7 @@ const Messages = () => {
                   {smiles.map((e) => {
                     return (
                       <p
+                        key={e}
                         className="text-[35px] cursor-pointer"
                         onClick={() => setSmile((prev) => prev + e)}
                       >

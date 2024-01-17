@@ -112,6 +112,34 @@ export interface PropsComment {
 // Chat send message
 
 export interface ChatMessage {
-  chatId: number;
+  chatId: number | undefined;
   messageText: string;
+}
+
+export interface GetChats {
+  data: [
+    {
+      receiveUser: {
+        userId: string;
+        userName: string;
+        userPhoto: string;
+        fullname: string;
+        subscriptions: boolean;
+      };
+      chatId: number | undefined;
+    },
+  ];
+}
+
+export interface GetChatById {
+  data: [
+    {
+      userId: string;
+      userPhoto: string;
+      messageId: number;
+      sendMassageDate: string;
+      chatId: number;
+      messageText: string;
+    },
+  ];
 }

@@ -136,6 +136,7 @@ const OpenLeftMessage = () => {
                           handleClick(user),
                             dispatch(setopenLeft(false)),
                             createChat(user.id);
+                          dispatch(setOpenEditOrDeleteModal(false));
                         }}
                         className=""
                         to={`user/${user.id}`}

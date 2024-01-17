@@ -1,10 +1,10 @@
 import axios from "axios";
-import { ChatMessage, IPost, IPostById, likeId } from "../../interfaces";
+import { ChatMessage, GetChatById, GetChats, likeId } from "../../interfaces";
 const token = window.localStorage.getItem("access_token");
 
 class chatService {
   async getChats() {
-    return axios.get<IPost>(
+    return axios.get<GetChats>(
       `${import.meta.env.VITE_APP_API_URL}Chat/get-chats`,
       {
         headers: {
@@ -13,8 +13,8 @@ class chatService {
       },
     );
   }
-  async getChatById(chatId: number) {
-    return axios.get<IPostById>(
+  async getChatById(chatId?: number) {
+    return axios.get<GetChatById>(
       `${import.meta.env.VITE_APP_API_URL}Chat/get-chat-by-id?chatId=${chatId}`,
       {
         headers: {
@@ -38,6 +38,8 @@ class chatService {
     );
   }
   async sendMessage(data: ChatMessage): Promise<ChatMessage> {
+    console.log(data);
+
     const response = await axios.post<ChatMessage>(
       `${import.meta.env.VITE_APP_API_URL}Chat/send-message`,
       data,
@@ -47,7 +49,6 @@ class chatService {
         },
       },
     );
-    console.log(response.data);
     return response.data;
   }
   async deleteMessage(id: number) {

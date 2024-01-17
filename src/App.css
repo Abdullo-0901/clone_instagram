@@ -15,7 +15,6 @@ select.input-error {
   scrollbar-width: none; /* Firefox */
 }
 
-
 .dropdown-content {
   display: none !important;
 }
@@ -23,4 +22,26 @@ select.input-error {
   display: block !important;
   cursor: pointer;
   /* background-color: rgba(0, 0, 0, 0.275); */
+}
+
+.active {
+  font-weight: 700;
+}
+
+.wrapper-message > .query:active {
+  color: #aaaaaa;
+}
+
+.to-active:active,
+.delete-active:active {
+  color: #aaaaaa;
+}
+
+.message-user .panel-hidden {
+  display: none;
+}
+
+.message-user:hover .panel-hidden {
+  display: block;
+  cursor: pointer;
 }

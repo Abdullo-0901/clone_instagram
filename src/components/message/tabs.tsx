@@ -6,7 +6,11 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { UserInfoInterface } from "../../interfaces";
-import { setEmployeeId, setOpenMessageUser } from "../../store/storeSlice";
+import {
+  setEmployeeId,
+  setOpenMessageUser,
+  setRefetchMessage,
+} from "../../store/storeSlice";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -100,6 +104,10 @@ export default function BasicTabs(usersStorage: TabPropsChild) {
                 onClick={() => {
                   dispatch(setOpenMessageUser(false));
                   dispatch(setEmployeeId(user.id));
+                  dispatch(setRefetchMessage(true));
+                  setTimeout(() => {
+                    dispatch(setRefetchMessage(false));
+                  }, 100);
                 }}
                 className="cursor-pointer"
               >
