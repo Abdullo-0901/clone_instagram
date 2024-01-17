@@ -29,6 +29,8 @@ const Messages = () => {
   const chatServices = new chatService();
   const { data: getChats, isSuccess } = useGetChats();
   const { data: userInfo } = UseGetUserProfileById(messageUserId);
+  const [messagePanel, setMessagePanel] = useState<boolean>(false);
+  const [messagePanelId, setMessagePanelId] = useState<number | string>("");
 
   const { mutate: sendMessage } = useMutation(
     ["sendMessage"],
@@ -89,6 +91,7 @@ const Messages = () => {
     "😛",
     "😜",
   ];
+  const res = result ? [...result] : [];
 
   const userId = getToken();
   refetchMessage && refetch();
@@ -178,22 +181,8 @@ const Messages = () => {
             </div>
           </div>
 
-          {/* <div>
-              {message?.data
-                .filter((mes) => mes.userId != userId?.sid)
-                .map((mess) => {
-                  return (
-                    <div
-                      className="my-2 p-[7px_12px] rounded-[10px_4px_18px_10px] bg-[#3795f0] text-white"
-                      key={mess.messageText}
-                    >
-                      <p>{mess.messageText}</p>
-                    </div>
-                  );
-                })}
-            </div> */}
           <div className="wrapper-message flex-col-reverse gap-[20px]">
-            {result?.map((mess) => {
+            {res?.map((mess) => {
               return (
                 <>
                   <div
@@ -204,11 +193,20 @@ const Messages = () => {
                         : "justify-end"
                     }`}
                   >
-                    {/* <div
-                      // panelMessage === e.messageId ? "flex" : "hidden"
-                      className={`
+                    {messagePanel && (
+                      <div
+                        className={`${
+                          messagePanelId === mess.messageId ? "flex" : "hidden"
+                        }
                      modal-panel-message bg-[#000] gap-[20px]   text-[#fff] p-[5px] px-[10px] rounded-[5px]`}
-                    ></div> */}
+                      >
+                        <p className="cursor-pointer">Переслать</p>
+                        <p className="cursor-pointer">Копировать</p>
+                        <p className="cursor-pointer" onClick={() => {}}>
+                          Отменить отправку
+                        </p>
+                      </div>
+                    )}
                     <div
                       onClick={() => {}}
                       className={`${
@@ -217,7 +215,14 @@ const Messages = () => {
                           : "block panel-hidden"
                       } panel-message relative`}
                     >
-                      <p>...</p>
+                      <p
+                        onClick={() => {
+                          setMessagePanel(true),
+                            setMessagePanelId(mess.messageId);
+                        }}
+                      >
+                        ...
+                      </p>
                     </div>
                     <Avatar
                       src={mess.userPhoto}
