@@ -14,6 +14,7 @@ export interface CounterState {
   idxEditOrDelete: string | number;
   openmessageuser: boolean;
   refetchMessage: boolean;
+  messagePanel: boolean;
 }
 const tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
@@ -29,6 +30,7 @@ const initialState: CounterState = {
   openEditOrDeleteModal: false,
   openmessageuser: true,
   refetchMessage: false,
+  messagePanel: false,
 };
 export const slice = createSlice({
   name: "modal",
@@ -71,6 +73,9 @@ export const slice = createSlice({
     setOpenMessageUser: (state, action: PayloadAction<boolean>) => {
       state.openmessageuser = action.payload;
     },
+    setMessagePanel: (state, action: PayloadAction<boolean>) => {
+      state.messagePanel = action.payload;
+    },
   },
 });
 
@@ -88,4 +93,5 @@ export const {
   setIdxEditOrDelete,
   setopenLeftMessage,
   setRefetchMessage,
+  setMessagePanel,
 } = slice.actions;

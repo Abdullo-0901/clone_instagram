@@ -8,7 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { UserInfoInterface } from "../../interfaces";
 import { getUserByUserName } from "../../services/search";
-import { setOpenEditOrDeleteModal, setopenLeft } from "../../store/storeSlice";
+import {
+  setEmployeeId,
+  setOpenEditOrDeleteModal,
+  setopenLeft,
+} from "../../store/storeSlice";
 import { getToken } from "../../utils/token";
 import BasicTabs from "./tabs";
 import MessageDialog from "../dialog/dialog-message";
@@ -137,9 +141,10 @@ const OpenLeftMessage = () => {
                             dispatch(setopenLeft(false)),
                             createChat(user.id);
                           dispatch(setOpenEditOrDeleteModal(false));
+                          dispatch(setEmployeeId(user.id));
                         }}
                         className=""
-                        to={`user/${user.id}`}
+                        to={`messages`}
                       >
                         <div className="flex gap-6 items-center">
                           <Avatar

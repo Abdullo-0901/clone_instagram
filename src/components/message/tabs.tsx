@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { UserInfoInterface } from "../../interfaces";
 import {
   setEmployeeId,
+  setMessagePanel,
   setOpenMessageUser,
   setRefetchMessage,
 } from "../../store/storeSlice";
@@ -105,6 +106,7 @@ export default function BasicTabs(usersStorage: TabPropsChild) {
                   dispatch(setOpenMessageUser(false));
                   dispatch(setEmployeeId(user.id));
                   dispatch(setRefetchMessage(true));
+                  dispatch(setMessagePanel(false));
                   setTimeout(() => {
                     dispatch(setRefetchMessage(false));
                   }, 100);

@@ -16,20 +16,20 @@ import {
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import { ChatMessage } from "../interfaces";
 import { chatService } from "../services/Chat/chat.service";
-import { setOpenEditOrDeleteModal } from "../store/storeSlice";
+import { setMessagePanel, setOpenEditOrDeleteModal } from "../store/storeSlice";
 import { getToken } from "../utils/token";
 
 const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
   const messageUserId = useSelector(({ modal }) => modal.employeeId);
   const refetchMessage = useSelector(({ modal }) => modal.refetchMessage);
+  const messagePanel = useSelector(({ modal }) => modal.messagePanel);
   const [modalSmile, setModalSmile] = useState(false);
   const [smile, setSmile] = useState<string>("");
   const dispatch = useDispatch();
   const chatServices = new chatService();
   const { data: getChats, isSuccess } = useGetChats();
   const { data: userInfo } = UseGetUserProfileById(messageUserId);
-  const [messagePanel, setMessagePanel] = useState<boolean>(false);
   const [messagePanelId, setMessagePanelId] = useState<number | string>("");
 
   const { mutate: sendMessage } = useMutation(
@@ -42,12 +42,22 @@ const Messages = () => {
     },
   );
 
+  const { mutate: deleteMessageId } = useMutation(
+    ["deleteMessageId"],
+    (messageId: number) => chatServices.deleteMessage(messageId),
+    {
+      async onSuccess() {
+        await refetch();
+      },
+    },
+  );
+
   const chatId = getChats?.data.find(
     (chat) => chat.receiveUser.userId === messageUserId,
   );
 
   const { data: message, refetch } = useGetMessageById(chatId?.chatId);
-  const result = message?.data.reverse();
+  const result = message?.data.sort((a, b) => a.messageId - b.messageId);
 
   const smiles = [
     "😂",
@@ -181,7 +191,7 @@ const Messages = () => {
             </div>
           </div>
 
-          <div className="wrapper-message flex-col-reverse gap-[20px]">
+          <div className="wrapper-message mb-5 flex-col-reverse gap-[20px]">
             {res?.map((mess) => {
               return (
                 <>
@@ -202,7 +212,12 @@ const Messages = () => {
                       >
                         <p className="cursor-pointer">Переслать</p>
                         <p className="cursor-pointer">Копировать</p>
-                        <p className="cursor-pointer" onClick={() => {}}>
+                        <p
+                          className="cursor-pointer"
+                          onClick={() => {
+                            deleteMessageId(mess.messageId);
+                          }}
+                        >
                           Отменить отправку
                         </p>
                       </div>
@@ -217,7 +232,7 @@ const Messages = () => {
                     >
                       <p
                         onClick={() => {
-                          setMessagePanel(true),
+                          dispatch(setMessagePanel(true)),
                             setMessagePanelId(mess.messageId);
                         }}
                       >
