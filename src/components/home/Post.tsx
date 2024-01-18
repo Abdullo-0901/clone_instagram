@@ -196,15 +196,13 @@ const Post = (): JSX.Element | JSX.Element[] | undefined => {
                         return (
                           <SwiperSlide key={ind}>
                             <div className="relative h-96">
-                          
-                            <img
+                              <img
                                 className="w-fit h-full"
                                 src={`${
                                   import.meta.env.VITE_APP_FILES_URL
                                 }${img}`}
                                 alt=""
                               />
-                          
                             </div>
                           </SwiperSlide>
                         );

@@ -48,11 +48,9 @@ const Reels = () => {
             <CircularProgress color="inherit" />
           </Backdrop>
         ) : (
-          res?.map((rel) => {
-            console.log();
-
+          res?.map((rel, id) => {
             return (
-              <div className="relative">
+              <div className="relative" key={id}>
                 <div className="absolute gap-y-4 flex flex-col right-[-40px] z-50 bottom-5">
                   <div className="flex  flex-col items-center justify-center">
                     {rel.postLike ? (

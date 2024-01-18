@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface CounterState {
   openAddModal: boolean;
@@ -9,8 +9,11 @@ export interface CounterState {
   employeeId: string;
   deleteEmployeComment: number | string;
   openleft: boolean;
+  openleftmessage: boolean;
   openEditOrDeleteModal: boolean;
   idxEditOrDelete: string | number;
+  openmessageuser: boolean;
+  refetchMessage: boolean;
 }
 const tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
@@ -22,7 +25,10 @@ const initialState: CounterState = {
   deleteEmployeComment: "",
   idxEditOrDelete: "",
   openleft: false,
+  openleftmessage: false,
   openEditOrDeleteModal: false,
+  openmessageuser: true,
+  refetchMessage: false,
 };
 export const slice = createSlice({
   name: "modal",
@@ -53,8 +59,17 @@ export const slice = createSlice({
     setopenLeft: (state, action: PayloadAction<boolean>) => {
       state.openleft = action.payload;
     },
+    setopenLeftMessage: (state, action: PayloadAction<boolean>) => {
+      state.openleftmessage = action.payload;
+    },
+    setRefetchMessage: (state, action: PayloadAction<boolean>) => {
+      state.refetchMessage = action.payload;
+    },
     setOpenEditOrDeleteModal: (state, action: PayloadAction<boolean>) => {
       state.openEditOrDeleteModal = action.payload;
+    },
+    setOpenMessageUser: (state, action: PayloadAction<boolean>) => {
+      state.openmessageuser = action.payload;
     },
   },
 });
@@ -69,5 +84,8 @@ export const {
   setEmpoleeDeleteId,
   setopenLeft,
   setOpenEditOrDeleteModal,
+  setOpenMessageUser,
   setIdxEditOrDelete,
+  setopenLeftMessage,
+  setRefetchMessage,
 } = slice.actions;
