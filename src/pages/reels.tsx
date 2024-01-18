@@ -12,10 +12,16 @@ import send from "../assets/send.png";
 import { UseGetPost } from "../components/customersHook/post/useGetPosts";
 import { UseGetUser } from "../components/customersHook/useGetUser";
 import { getPostsService } from "../services/Post/post-service";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "../store/storeSlice";
+import BasicPopover from "../components/popower";
 const Reels = () => {
   const postService = new getPostsService();
   const { data, refetch } = UseGetPost();
   const { data: users } = UseGetUser();
+  const dispatch = useDispatch()
+  const openAddModal = useSelector(({modal}) => modal.openAddModal)
+
   const { mutate, isLoading } = useMutation(
     ["like"],
     (idx: number) => postService.like(idx),
@@ -73,9 +79,10 @@ const Reels = () => {
                     )}
                     <h1>{rel.postLikeCount}</h1>
                   </div>
-                  <div className="flex flex-col items-center cursor-pointer">
+                  <div className="relative" onClick={() => {dispatch(openModal(openAddModal ? false :true))}} >
                     <MapsUgcIcon />
                     <h1>{rel.comments.length}</h1>
+                    <BasicPopover />
                   </div>
                   <img
                     className="cursor-pointer  w-[20px] h-[20px] mt-[2px]"
