@@ -15,6 +15,7 @@ export interface CounterState {
   openmessageuser: boolean;
   refetchMessage: boolean;
   messagePanel: boolean;
+  informationUser: boolean;
 }
 const tokens = localStorage.getItem("access_token");
 const initialState: CounterState = {
@@ -31,6 +32,7 @@ const initialState: CounterState = {
   openmessageuser: true,
   refetchMessage: false,
   messagePanel: false,
+  informationUser: false,
 };
 export const slice = createSlice({
   name: "modal",
@@ -76,6 +78,9 @@ export const slice = createSlice({
     setMessagePanel: (state, action: PayloadAction<boolean>) => {
       state.messagePanel = action.payload;
     },
+    setInformationUser: (state, action: PayloadAction<boolean>) => {
+      state.informationUser = action.payload;
+    },
   },
 });
 
@@ -94,4 +99,5 @@ export const {
   setopenLeftMessage,
   setRefetchMessage,
   setMessagePanel,
+  setInformationUser,
 } = slice.actions;

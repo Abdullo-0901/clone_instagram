@@ -1,33 +1,51 @@
 import CallIcon from "@mui/icons-material/Call";
+import CloseIcon from "@mui/icons-material/Close";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import Avatar from "@mui/material/Avatar";
+import Switch from "@mui/material/Switch";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "../App.css";
 import {
   useGetChats,
   useGetMessageById,
 } from "../components/customersHook/chat-query-hooks/useChat";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
+import MessageDialog from "../components/dialog/dialog-message";
 import { ChatMessage } from "../interfaces";
 import { chatService } from "../services/Chat/chat.service";
-import { setMessagePanel, setOpenEditOrDeleteModal } from "../store/storeSlice";
+import { getUserByUserName } from "../services/search";
+import {
+  setInformationUser,
+  setMessagePanel,
+  setOpenEditOrDeleteModal,
+} from "../store/storeSlice";
 import { getToken } from "../utils/token";
+const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const Messages = () => {
   const openMessage = useSelector(({ modal }) => modal.openmessageuser);
   const messageUserId = useSelector(({ modal }) => modal.employeeId);
   const refetchMessage = useSelector(({ modal }) => modal.refetchMessage);
   const messagePanel = useSelector(({ modal }) => modal.messagePanel);
+  const informationUser = useSelector(({ modal }) => modal.informationUser);
+  const openEditOrDeleteModal = useSelector(
+    ({ modal }) => modal.openEditOrDeleteModal,
+  );
+
   const [modalSmile, setModalSmile] = useState(false);
   const [smile, setSmile] = useState<string>("");
+  const [value, setValue] = useState<string>("");
+
   const dispatch = useDispatch();
   const chatServices = new chatService();
+  const getByUserName = new getUserByUserName();
   const { data: getChats, isSuccess } = useGetChats();
   const { data: userInfo } = UseGetUserProfileById(messageUserId);
   const [messagePanelId, setMessagePanelId] = useState<number | string>("");
@@ -49,6 +67,14 @@ const Messages = () => {
       async onSuccess() {
         await refetch();
       },
+    },
+  );
+
+  const { data: users } = useQuery(
+    ["byUserName", value],
+    () => getByUserName.getUser(value),
+    {
+      enabled: !!value,
     },
   );
 
@@ -107,7 +133,11 @@ const Messages = () => {
   refetchMessage && refetch();
 
   return (
-    <div className="w-[1400px]   p-[10px] ml-[165px] ">
+    <div
+      className={` ${
+        informationUser ? "w-[757px]" : "w-[1400px]"
+      }   p-[10px] ml-[165px] `}
+    >
       {openMessage ? (
         <div className="w-full gap-y-2 h-[78vh] flex flex-col justify-center items-center">
           <svg
@@ -132,7 +162,7 @@ const Messages = () => {
         </div>
       ) : (
         <div className="flex flex-col">
-          <div className="flex  w-full  justify-between items-center p-[10px] border-b-[1px]">
+          <div className="flex   z-[999] bg-white  w-full  justify-between items-center p-[10px] border-b-[1px]">
             <div className="user flex items-center gap-[15px] cursor-pointer w-[30%]">
               <Avatar
                 sx={{ width: 46, height: 46 }}
@@ -144,10 +174,14 @@ const Messages = () => {
                 <p className="text-[12px] text-[#737373]">В сети</p>
               </div>
             </div>
-            <div className="wrapper-icons flex items-center gap-[18px]">
+            <div className="wrapper-icons  flex items-center gap-[18px]">
               <CallIcon />
               <VideoCameraFrontIcon />
-              <button>
+              <button
+                onClick={() =>
+                  dispatch(setInformationUser(informationUser ? false : true))
+                }
+              >
                 <svg
                   className="x1lliihq x1n2onr6 x5n08af css-1m9ymud-MuiSvgIcon-root"
                   focusable="false"
@@ -191,7 +225,9 @@ const Messages = () => {
             </div>
           </div>
 
-          <div className="wrapper-message mb-5 flex-col-reverse gap-[20px]">
+          <div
+            className={`wrapper-message mt-[px] mb-5 flex-col-reverse gap-[20px] `}
+          >
             {res?.map((mess) => {
               return (
                 <>
@@ -210,7 +246,14 @@ const Messages = () => {
                         }
                      modal-panel-message bg-[#000] gap-[20px]   text-[#fff] p-[5px] px-[10px] rounded-[5px]`}
                       >
-                        <p className="cursor-pointer">Переслать</p>
+                        <p
+                          className="cursor-pointer"
+                          onClick={() =>
+                            dispatch(setOpenEditOrDeleteModal(true))
+                          }
+                        >
+                          Переслать
+                        </p>
                         <p className="cursor-pointer">Копировать</p>
                         <p
                           className="cursor-pointer"
@@ -250,7 +293,9 @@ const Messages = () => {
                         userId?.sid !== mess.userId
                           ? "bg-[#00000010]"
                           : "bg-[#3797f0] text-[#fff]"
-                      } bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px] my-2`}
+                      } bg-[#00000010] inline rounded-[20px] p-[5px] px-[10px] my-2 ${
+                        informationUser ? "mr-3" : ""
+                      }`}
                     >
                       {mess.messageText}
                     </p>
@@ -260,7 +305,11 @@ const Messages = () => {
             })}
           </div>
 
-          <div className=" fixed w-[94%] z-50 bottom-0">
+          <div
+            className={`${
+              informationUser ? "w-[64%]" : "w-[94%]"
+            } fixed  z-50 bottom-0`}
+          >
             <form
               onSubmit={(event) => {
                 event.preventDefault();
@@ -333,6 +382,135 @@ const Messages = () => {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {openEditOrDeleteModal && (
+        <MessageDialog
+          show={openEditOrDeleteModal}
+          handleClose={() =>
+            dispatch(
+              setOpenEditOrDeleteModal(openEditOrDeleteModal ? false : true),
+            )
+          }
+        >
+          <div className="p-[10px_15px]">
+            <div className="wrapper-text flex justify-between items-center  p-[15px]">
+              <p className="text-[16px] font-[700] mx-auto text-center">
+                Новое сообщение
+              </p>
+              <button onClick={() => dispatch(setOpenEditOrDeleteModal(false))}>
+                <CloseIcon
+                  className="to-active cursor-pointer"
+                  sx={{ fontSize: "28px" }}
+                />
+              </button>
+            </div>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+              className="flex flex-col justify-between"
+            >
+              <div className="wrapper-input flex items-end gap-[20px] py-[7px] px-[20px] border-t border-b mb-3">
+                <label className="font-[500]">Кому:</label>
+                <div
+                  className={`${
+                    value == "" ? "hidden" : "flex"
+                  } items-end gap-[10px] bg-[#e0f1ff]  rounded-[12px] px-[12px] py-[3px] font-[600] cursor-pointer`}
+                >
+                  <p className="text-[14px] text-[#0095F6] hover:text-[#1d4a68]">
+                    {value}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(setOpenEditOrDeleteModal(false))}
+                  >
+                    <CloseIcon
+                      className="to-active cursor-pointer"
+                      sx={{ fontSize: "18px", color: "#0095F6" }}
+                    />
+                  </button>
+                </div>
+                <input
+                  onChange={(event) => setValue(event.target.value)}
+                  value={value}
+                  type="text"
+                  placeholder="Поиск..."
+                  className="text-[14px] outline-none w-[100%]"
+                />
+              </div>
+
+              <div className="wrapper-search overflow-auto h-[50vh]">
+                <div className="flex flex-col gap-6 ">
+                  {users?.data.data.map((user) => {
+                    return (
+                      <Link
+                        onClick={() => {
+                          dispatch(setOpenEditOrDeleteModal(false));
+                        }}
+                        className=""
+                        to={`messages`}
+                      >
+                        <div className="flex gap-6 items-center">
+                          <Avatar
+                            sx={{ width: 46, height: 46 }}
+                            src={`${import.meta.env.VITE_APP_FILES_URL}${
+                              user.avatar
+                            }`}
+                          />
+                          <div className="flex flex-col justify-between">
+                            <h1 className="font-semibold text-black">
+                              {user.userName}
+                            </h1>
+                            <h1 className="text-gray-300">{user.fullName}</h1>
+                          </div>
+                        </div>{" "}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  className="h-[44px]  flex justify-center items-center text-center mx-auto w-[94%] bg-[#0095f6] text-[#fff] text-[14px] font-[600] rounded-[8px]"
+                >
+                  Чат
+                </button>
+              </div>
+            </form>
+          </div>
+        </MessageDialog>
+      )}
+      {informationUser && (
+        <div className="w-[370px] bg-white border-l  h-full fixed right-0 top-0">
+          <div className="pl-5   pr-4">
+            <h1 className="my-3 text-black font-semibold text-[20px]">
+              Информация
+            </h1>
+            <div className="flex justify-between items-center">
+              <h1 className="">Выключить уведомления о сообщениях</h1>
+              <Switch {...label} defaultChecked />
+            </div>
+            <div className="flex justify-between items-center my-4 ">
+              <h1>Переместить в папку "Основные"</h1>
+              <button className="bg-gray-300 h-[32px]  px-3 rounded-xl hover:bg-gray-400">
+                Переместить
+              </button>
+            </div>
+          </div>
+          <hr />
+          <div className="flex flex-col ">
+            <h1 className="text-[18px] text-black font-semibold px-3 my-2">
+              Участники
+            </h1>
+            <Avatar
+              src={mess.userPhoto}
+              sx={{
+                display: userId?.sid !== mess.userId ? "flex" : "none",
+              }}
+            />
           </div>
         </div>
       )}
