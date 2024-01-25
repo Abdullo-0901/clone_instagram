@@ -16,6 +16,7 @@ import {
   useGetChats,
   useGetMessageById,
 } from "../components/customersHook/chat-query-hooks/useChat";
+import { UseGetUser } from "../components/customersHook/useGetUser";
 import { UseGetUserProfileById } from "../components/customersHook/useGetUserById";
 import MessageDialog from "../components/dialog/dialog-message";
 import { ChatMessage } from "../interfaces";
@@ -84,6 +85,11 @@ const Messages = () => {
 
   const { data: message, refetch } = useGetMessageById(chatId?.chatId);
   const result = message?.data.sort((a, b) => a.messageId - b.messageId);
+
+  const { data } = UseGetUser();
+  const userChatByFilter = data?.data.filter(
+    (user) => user.id == messageUserId,
+  );
 
   const smiles = [
     "😂",
@@ -505,12 +511,19 @@ const Messages = () => {
             <h1 className="text-[18px] text-black font-semibold px-3 my-2">
               Участники
             </h1>
-            <Avatar
-              src={mess.userPhoto}
-              sx={{
-                display: userId?.sid !== mess.userId ? "flex" : "none",
-              }}
-            />
+
+            {userChatByFilter?.map((us) => {
+              return (
+                <>
+                  <Avatar
+                    src={us.avatar}
+                    sx={{
+                      display: userId?.sid !== us.id ? "flex" : "none",
+                    }}
+                  />
+                </>
+              );
+            })}
           </div>
         </div>
       )}

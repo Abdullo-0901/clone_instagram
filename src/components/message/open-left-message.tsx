@@ -144,7 +144,7 @@ const OpenLeftMessage = () => {
                           dispatch(setEmployeeId(user.id));
                         }}
                         className=""
-                        to={`messages`}
+                        to={``}
                       >
                         <div className="flex gap-6 items-center">
                           <Avatar
